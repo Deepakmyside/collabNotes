@@ -14,7 +14,7 @@ const register = async (req, res) => {
 
         const hashedPassword = await bcrypt.hash(password, 10)
 
-        const user = await user.createOne({ name, email, password})
+        const user = await User.create({ name, email, password: hashedPassword})
 
         const token = jwt.sign(
             { id: user._id},
@@ -23,6 +23,7 @@ const register = async (req, res) => {
         )
         res.status(201).json({ token, user: {id: user._id, name: user.name, email: user.email}})
     } catch(error) {
+        console.log(error)
         res.status(200).json({message: 'Server error', error })
     }
 }
