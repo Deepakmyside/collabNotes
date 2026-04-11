@@ -1,5 +1,6 @@
 const express = require('express')
 require("dotenv").config()
+const cors = require('cors')
 const app = express()
 const http = require('http')
 const { Server} = require('socket.io')
@@ -15,6 +16,11 @@ const socketHandler = require('./socket/socketHandler')
 
 
 app.use(express.json())
+app.use(cors({
+    origin: 'http://localhost:5137',
+    credentials: true
+}))
+
 
 const authRouter = require("./routes/authRoutes")
 const noteRouter = require("./routes/noteRoutes")
