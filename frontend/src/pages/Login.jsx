@@ -16,18 +16,21 @@ function Login() {
             const body = isLogin 
                 ? { email, password } 
                 : { name, email, password }
-            
+             
             const res = await API.post(endpoint, body)
             localStorage.setItem('token', res.data.token)
-            navigate('/dashboard')
+
+            const redirect = localStorage.getItem('redirectAfterLogin')
+            localStorage.removeItem('redirectAfterLogin')
+            navigate(redirect || '/dashboard')
         } catch (err) {
             setError(err.response?.data?.message || 'Something went wrong')
         }
     }
 
     return (
-        <div className="min-h-screen bg-[#6ba3d8] flex items-center justify-center">
-            <div className="bg-[#b7d1dc] border border-[#222] rounded-xl p-8 w-full max-w-md">
+        <div className="min-h-screen bg-[hsl(51,18%,8%)] flex items-center justify-center">
+            <div className="bg-[#876c52] border border-[#222] rounded-xl p-8 w-full max-w-md">
                 
                 <h1 className="text-white text-2xl font-bold mb-2">The Monolith</h1>
                 <p className="text-gray-500 text-sm mb-6">
@@ -86,6 +89,8 @@ function Login() {
                     className="w-full bg-white text-black py-3 rounded-lg text-sm font-medium hover:bg-gray-200 transition-all"
                 >
                     {isLogin ? 'Sign In' : 'Create Account'}
+
+
                 </button>
             </div>
         </div>

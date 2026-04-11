@@ -6,6 +6,7 @@ import OnlineUsers from '../components/OnlineUsers'
 
 function Editor() {
     const { roomId } = useParams()
+    console.log('roomId:', roomId)
     const navigate = useNavigate()
     const [title, setTitle] = useState('')
     const [content, setContent] = useState('')
@@ -57,12 +58,18 @@ function Editor() {
         setSaving(true)
         try {
             await API.put(`/notes/${roomId}`, { title, content })
+            navigate('/dashboard')
         } catch (err) {
             console.log(err)
         }
         setSaving(false)
     }
-
+    
+    const shareNote = () => {
+        const link = `${window.location.origin}/editor/${roomId}`
+        navigator.clipboard.writeText(link)
+        alert('Link  copied!')
+    }
     return (
         <div className="min-h-screen bg-[#0a0a0a] text-white flex flex-col">
             
@@ -75,6 +82,11 @@ function Editor() {
                 </button>
                 <div className="flex items-center gap-4">
                     <OnlineUsers users={onlineUsers} />
+                    
+                    <button 
+                    onClick={shareNote}
+                    className='border border-[#333] text-gray-300 px-4 py-2 rounded-lg text-sm hover:border-gray-500 transition-all'>Share</button>
+                    
                     <button
                         onClick={saveNote}
                         className="bg-white text-black px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-200 transition-all"

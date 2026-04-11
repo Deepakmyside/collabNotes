@@ -27,7 +27,7 @@ function Dashboard() {
         if (!title.trim()) return
         try {
             const res = await API.post('/notes', { title, content: '' })
-            navigate(`/editor/${res.data.roomId}`)
+            navigate(`/editor/${res.data.note.roomId}`)
         } catch (err) {
             console.log(err)
         }
@@ -51,7 +51,10 @@ function Dashboard() {
         <div className="min-h-screen bg-[#0a0a0a] text-white">
             
             <div className="border-b border-[#222] px-6 py-4 flex items-center justify-between">
-                <h1 className="text-white font-bold text-lg">The Monolith</h1>
+                   <div className="flex items-center gap-2">
+                    <img src="/favicon.svg" alt="logo" className="w-9 h-9" />
+                <h1 className="text-white font-bold text-lg ">collab Notes</h1>
+                </div>
                 <button
                     onClick={logout}
                     className="text-gray-400 text-sm hover:text-white transition-all"
