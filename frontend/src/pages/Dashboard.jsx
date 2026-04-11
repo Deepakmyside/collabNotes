@@ -48,12 +48,12 @@ function Dashboard() {
     }
 
     return (
-        <div className="min-h-screen bg-[#0a0a0a] text-white">
+        <div className="min-h-screen bg-[#0a0a0a] text-white flex flex-col">
             
             <div className="border-b border-[#222] px-6 py-4 flex items-center justify-between">
-                   <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate('/dashboard')}>
                     <img src="/favicon.svg" alt="logo" className="w-9 h-9" />
-                <h1 className="text-white font-bold text-lg ">collab Notes</h1>
+                    <h1 className="text-white font-bold text-lg">collab Notes</h1>
                 </div>
                 <button
                     onClick={logout}
@@ -63,8 +63,7 @@ function Dashboard() {
                 </button>
             </div>
 
-            <div className="max-w-5xl mx-auto px-6 py-8">
-                
+            <div className="max-w-5xl mx-auto px-6 py-8 flex-1 w-full">
                 <div className="mb-8">
                     <h2 className="text-2xl font-bold mb-1">Workspace</h2>
                     <p className="text-gray-500 text-sm">Your thoughts, one place at a time</p>
@@ -102,6 +101,20 @@ function Dashboard() {
                     </div>
                 )}
             </div>
+
+            <footer className="border-t border-[#222] px-9 py-6 flex items-center justify-between">
+                <p className="text-gray-600 text-sm">© 2026 collabNotes</p>
+                <a 
+                    href="https://www.linkedin.com/in/deepak-sharma-517279378/" 
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-white text-xs hover:text-blue-400 transition-all flex items-center gap-1"
+                >
+                  <i className="devicon-linkedin-plain  text-sm hover:text-blue-400"></i>
+           
+                    Deepak Sharma
+                </a>
+            </footer>
         </div>
     )
 }
