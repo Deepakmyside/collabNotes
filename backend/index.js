@@ -17,7 +17,7 @@ const socketHandler = require('./socket/socketHandler')
 
 app.use(express.json())
 app.use(cors({
-    origin: 'http://localhost:5173',
+    origin: 'https://collabnotesdbd.vercel.app',
     credentials: true
 }))
 
