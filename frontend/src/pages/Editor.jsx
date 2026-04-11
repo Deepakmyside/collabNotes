@@ -10,7 +10,7 @@ function Editor() {
     const navigate = useNavigate()
     const [title, setTitle] = useState('')
     const [content, setContent] = useState('')
-    const [onlineUsers, setOnlineUsers] = useState([])
+    const [onlineUsers, setOnlineUsers] = useState([1])
     const [saving, setSaving] = useState(false)
 
     useEffect(() => {
@@ -23,13 +23,14 @@ function Editor() {
             if (title !== undefined) setTitle(title)
         })
 
-        socket.on('user-joined', (userId) => {
-            setOnlineUsers(prev => [...prev, userId])
+        socket.on('room-users', (count) => {
+              console.log('room-users received:', count)
+            setOnlineUsers(count)
         })
 
         return () => {
             socket.off('note-change')
-            socket.off('user-joined')
+            socket.off('room-users')
             socket.disconnect()
         }
     }, [roomId])
@@ -86,7 +87,7 @@ function Editor() {
                     <button 
                     onClick={shareNote}
                     className='border border-[#333] text-gray-300 px-4 py-2 rounded-lg text-sm hover:border-gray-500 transition-all'>Share</button>
-                    
+
                     <button
                         onClick={saveNote}
                         className="bg-white text-black px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-200 transition-all"

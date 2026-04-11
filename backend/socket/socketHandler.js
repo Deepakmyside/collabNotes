@@ -7,8 +7,11 @@ const socketHandler = (io) => {
             socket.join(roomId)
             console.log(`User ${socket.id} joined room ${roomId}`)
 
+            const roomUsers = io.sockets.adapter.rooms.get(roomId)
+            const userCount = roomUsers ? roomUsers.size: 1 
+
             //  Telling all users in room that new user joined
-            socket.to(roomId).emit('user-joined', socket.id)
+           io.to(roomId).emit('room-users', userCount)
         })
 
         //  Send everyone that user is typing
@@ -28,5 +31,4 @@ const socketHandler = (io) => {
       
     })
 }
-
 module.exports = socketHandler
