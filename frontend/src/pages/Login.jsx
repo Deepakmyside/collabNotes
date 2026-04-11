@@ -29,11 +29,11 @@ function Login() {
     }
 
     return (
-        <div className="min-h-screen bg-[hsl(51,18%,8%)] flex items-center justify-center">
-            <div className="bg-[#876c52] border border-[#222] rounded-xl p-8 w-full max-w-md">
+        <div className="min-h-screen bg-[hsl(0,0%,6%)] flex items-center justify-center">
+            <div className="bg-[#2b2826] border border-[#222] rounded-xl p-8 w-full max-w-md">
                 
-                <h1 className="text-white text-2xl font-bold mb-2">The Monolith</h1>
-                <p className="text-gray-500 text-sm mb-6">
+                <h1 className="text-white text-2xl font-bold mb-2">Collab Notes</h1>
+                <p className="text-gray-300 text-sm mb-6">
                     {isLogin ? 'Welcome back' : 'Create your account'}
                 </p>
 
@@ -41,7 +41,7 @@ function Login() {
                     <button
                         onClick={() => setIsLogin(true)}
                         className={`flex-1 py-2 rounded-md text-sm transition-all ${
-                            isLogin ? 'bg-white text-black' : 'text-gray-400'
+                            isLogin ? 'bg-gray-200 text-black' : 'text-gray-400'
                         }`}
                     >
                         Login
@@ -49,7 +49,7 @@ function Login() {
                     <button
                         onClick={() => setIsLogin(false)}
                         className={`flex-1 py-2 rounded-md text-sm transition-all ${
-                            !isLogin ? 'bg-white text-black' : 'text-gray-400'
+                            !isLogin ? 'bg-gray-200 text-black' : 'text-gray-400'
                         }`}
                     >
                         Sign Up
@@ -62,7 +62,7 @@ function Login() {
                         placeholder="Name"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
-                        className="w-full bg-[#1a1a1a] text-white border border-[#333] rounded-lg px-4 py-3 mb-3 text-sm outline-none focus:border-gray-500"
+                        className="w-full bg-[#1a1a1a] text-gray-200 border border-[#333] rounded-lg px-4 py-3 mb-3 text-sm outline-none focus:border-gray-500"
                     />
                 )}
 
