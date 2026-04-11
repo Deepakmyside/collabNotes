@@ -65,7 +65,7 @@ const updateNote = async (req, res) => {
 // comparing ids
 // converting from object mongoid to string (jwt se compare krna h aur woh string h )
         const isOwner = note.owner.toString() === req.user.id
-        const isCollaborator = note.collaborators.map(id.toString()).includes(req.user.id)
+        const isCollaborator = (note.collaborators || []).map(id => id.toString()).includes(req.user.id)
 
         if(!isOwner && !isCollaborator) {
             return res.status(403).json({ message: 'Access denied, Invalid Credentials'})
@@ -79,7 +79,7 @@ const updateNote = async (req, res) => {
 
     } catch (error) {
         console.log(error)
-        res.stataus(500).json({message: "Server error", error})
+        res.status(500).json({message: "Server error", error})
     }
 }
 
