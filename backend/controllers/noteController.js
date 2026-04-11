@@ -1,4 +1,5 @@
 const Note = require('../models/Note')
+const { create } = require('../models/User')
 
 
 const createNote = async (req, res) => {
@@ -102,3 +103,5 @@ const deleteNote = async (req, res) => {
         res.status(500).json({ message: 'Server error', error})
     }
 }
+
+module.exports = { createNote, updateNote, getAllNotes, getNoteById, deleteNote }
