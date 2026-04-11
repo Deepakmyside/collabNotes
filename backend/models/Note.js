@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 
-const noteSchema = mongoose.noteSchema({
+const noteSchema = mongoose.Schema({
     title: {
         type: String,
         required: true,
@@ -15,10 +15,11 @@ const noteSchema = mongoose.noteSchema({
         ref: 'User',
         required: true
     },
-    collaborator: [{
+    collaborators: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
     }],
+    default:[],
     roomId: {
         type: String,
         unique: true

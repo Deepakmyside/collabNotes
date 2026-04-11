@@ -7,7 +7,7 @@ const authMiddleware = (req, res, next) => {
             message:'Access denied, no token'
         })
     }
-} 
+
   try{
     const decoded = jwt.verify(token, process.env.JWT_SECRET)
     req.user = decoded
@@ -17,3 +17,8 @@ const authMiddleware = (req, res, next) => {
         message:'Invalid token'
     })
   }
+
+  module.exports = authMiddleware
+}
+
+module.exports = authMiddleware
