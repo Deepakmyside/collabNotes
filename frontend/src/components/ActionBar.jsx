@@ -9,155 +9,129 @@ function ActionBar({ onCreate, onJoin, onAuthRequired }) {
   const isLoggedIn = !!localStorage.getItem('token')
 
   const handleNewNote = () => {
-    if (!isLoggedIn) {
-      onAuthRequired?.()
-      return
-    }
+    if (!isLoggedIn) { onAuthRequired?.(); return }
     setShowCreate(true)
   }
 
   const handleJoinClick = () => {
-    if (!isLoggedIn) {
-      onAuthRequired?.()
-      return
-    }
+    if (!isLoggedIn) { onAuthRequired?.(); return }
     setShowJoin(true)
   }
 
+  const Modal = ({ show, onClose, children }) => {
+    if (!show) return null
+    return (
+      <div
+        className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm"
+        onClick={(e) => { if (e.target === e.currentTarget) onClose() }}
+      >
+        {children}
+      </div>
+    )
+  }
+
   return (
-    <div className="mb-8 flex gap-3">
-
-      {/* New Note Button */}
-      <button
-        onClick={handleNewNote}
-        className="bg-white text-black px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-gray-100 transition-all"
-      >
-        + New Note
-      </button>
-
-      {/* Join Note Button */}
-      <button
-        onClick={handleJoinClick}
-        className="bg-[#111] border border-[#222] px-5 py-2.5 rounded-lg text-sm text-gray-300 hover:border-[#444] hover:text-white transition-all"
-      >
-        Join Note
-      </button>
-
-      {/* Create Modal */}
-      {showCreate && (
-        <div
-          className="fixed inset-0 bg-black/60 flex items-center justify-center z-50"
-          style={{ backdropFilter: 'blur(4px)' }}
-          onClick={(e) => { if (e.target === e.currentTarget) setShowCreate(false) }}
+    <>
+      <div className="mb-10 flex items-center gap-2">
+        {/* New Note */}
+        <button
+          onClick={handleNewNote}
+          className="h-9 px-4 rounded-full text-xs font-semibold bg-white text-black hover:bg-zinc-100 active:scale-[0.97] transition-all duration-150"
         >
-          <div className="bg-[#111] p-6 rounded-2xl w-[90%] max-w-sm border border-[#222]"
-               style={{ boxShadow: '0 25px 60px rgba(0,0,0,0.8)', animation: 'modalIn 0.2s ease-out' }}>
+          + New Note
+        </button>
 
-            <h3 className="text-white text-lg font-semibold mb-1">New Note</h3>
-            <p className="text-gray-500 text-sm mb-4">Give your note a title to get started</p>
+        {/* Join Note */}
+        <button
+          onClick={handleJoinClick}
+          className="h-9 px-4 rounded-full text-xs font-medium text-zinc-300 border border-zinc-700 hover:border-zinc-500 hover:text-zinc-100 active:scale-[0.97] transition-all duration-150"
+        >
+          Join Session
+        </button>
+      </div>
 
-            <input
-              type="text"
-              placeholder="e.g. Meeting notes, Ideas..."
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === 'Escape') setShowCreate(false)
-                if (e.key === 'Enter' && title.trim()) {
-                  onCreate(title)
-                  setTitle("")
-                  setShowCreate(false)
-                }
+      {/* ── Create Modal ── */}
+      <Modal show={showCreate} onClose={() => { setShowCreate(false); setTitle("") }}>
+        <div className="w-full max-w-sm bg-zinc-900 border border-zinc-700/60 rounded-2xl p-6 shadow-2xl">
+          <h3 className="text-zinc-100 text-base font-semibold mb-1">New Note</h3>
+          <p className="text-zinc-500 text-xs mb-5">Give your note a title to get started</p>
+
+          <input
+            type="text"
+            placeholder="e.g. Meeting notes, Ideas…"
+            value={title}
+            autoFocus
+            onChange={(e) => setTitle(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Escape') { setShowCreate(false); setTitle("") }
+              if (e.key === 'Enter' && title.trim()) {
+                onCreate(title); setTitle(""); setShowCreate(false)
+              }
+            }}
+            className="w-full bg-black border border-zinc-700 text-zinc-100 placeholder-zinc-600 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-zinc-500 transition-colors mb-4"
+          />
+
+          <div className="flex justify-end gap-2">
+            <button
+              onClick={() => { setShowCreate(false); setTitle("") }}
+              className="h-8 px-4 rounded-full text-xs text-zinc-500 hover:text-zinc-300 transition-colors"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={() => {
+                if (!title.trim()) return
+                onCreate(title); setTitle(""); setShowCreate(false)
               }}
-              autoFocus
-              className="w-full bg-[#0a0a0a] border border-[#2a2a2a] text-gray-200 px-4 py-3 rounded-lg text-sm mb-4 outline-none focus:border-[#444] transition-colors"
-            />
-
-            <div className="flex justify-end gap-2">
-              <button
-                onClick={() => setShowCreate(false)}
-                className="text-gray-500 text-sm px-4 py-2 hover:text-white transition-colors"
-              >
-                Cancel
-              </button>
-
-              <button
-                onClick={() => {
-                  if (!title.trim()) return
-                  onCreate(title)
-                  setTitle("")
-                  setShowCreate(false)
-                }}
-                className="bg-white text-black px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-100 transition-all"
-              >
-                Create
-              </button>
-            </div>
+              className="h-8 px-4 rounded-full text-xs font-semibold bg-white text-black hover:bg-zinc-100 transition-colors"
+            >
+              Create
+            </button>
           </div>
         </div>
-      )}
+      </Modal>
 
-      {/* Join Modal */}
-      {showJoin && (
-        <div
-          className="fixed inset-0 bg-black/60 flex items-center justify-center z-50"
-          style={{ backdropFilter: 'blur(4px)' }}
-          onClick={(e) => { if (e.target === e.currentTarget) setShowJoin(false) }}
-        >
-          <div className="bg-[#111] p-6 rounded-2xl w-[90%] max-w-sm border border-[#222]"
-               style={{ boxShadow: '0 25px 60px rgba(0,0,0,0.8)', animation: 'modalIn 0.2s ease-out' }}>
+      {/* ── Join Modal ── */}
+      <Modal show={showJoin} onClose={() => { setShowJoin(false); setRoomId("") }}>
+        <div className="w-full max-w-sm bg-zinc-900 border border-zinc-700/60 rounded-2xl p-6 shadow-2xl">
+          <h3 className="text-zinc-100 text-base font-semibold mb-1">Join a Session</h3>
+          <p className="text-zinc-500 text-xs mb-5">Paste the room code shared with you</p>
 
-            <h3 className="text-white text-lg font-semibold mb-1">Join a Note</h3>
-            <p className="text-gray-500 text-sm mb-4">Enter the room code shared with you</p>
+          <input
+            type="text"
+            placeholder="Room code…"
+            value={roomId}
+            autoFocus
+            onChange={(e) => setRoomId(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Escape') { setShowJoin(false); setRoomId("") }
+              if (e.key === 'Enter' && roomId.trim()) {
+                onJoin(roomId); setRoomId(""); setShowJoin(false)
+              }
+            }}
+            className="w-full bg-black border border-zinc-700 text-zinc-100 placeholder-zinc-600 rounded-xl px-4 py-2.5 text-sm font-mono outline-none focus:border-zinc-500 transition-colors mb-4"
+          />
 
-            <input
-              type="text"
-              placeholder="Paste room code..."
-              value={roomId}
-              onChange={(e) => setRoomId(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === 'Escape') setShowJoin(false)
-                if (e.key === 'Enter' && roomId.trim()) {
-                  onJoin(roomId)
-                  setRoomId("")
-                  setShowJoin(false)
-                }
+          <div className="flex justify-end gap-2">
+            <button
+              onClick={() => { setShowJoin(false); setRoomId("") }}
+              className="h-8 px-4 rounded-full text-xs text-zinc-500 hover:text-zinc-300 transition-colors"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={() => {
+                if (!roomId.trim()) return
+                onJoin(roomId); setRoomId(""); setShowJoin(false)
               }}
-              autoFocus
-              className="w-full bg-[#0a0a0a] border border-[#2a2a2a] text-gray-200 px-4 py-3 rounded-lg text-sm mb-4 outline-none focus:border-[#444] transition-colors font-mono"
-            />
-
-            <div className="flex justify-end gap-2">
-              <button
-                onClick={() => setShowJoin(false)}
-                className="text-gray-500 text-sm px-4 py-2 hover:text-white transition-colors"
-              >
-                Cancel
-              </button>
-
-              <button
-                onClick={() => {
-                  if (!roomId.trim()) return
-                  onJoin(roomId)
-                  setRoomId("")
-                  setShowJoin(false)
-                }}
-                className="bg-white text-black px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-100 transition-all"
-              >
-                Join
-              </button>
-            </div>
+              className="h-8 px-4 rounded-full text-xs font-semibold bg-white text-black hover:bg-zinc-100 transition-colors"
+            >
+              Join
+            </button>
           </div>
         </div>
-      )}
-
-      <style>{`
-        @keyframes modalIn {
-          from { opacity: 0; transform: scale(0.96) translateY(8px); }
-          to   { opacity: 1; transform: scale(1)    translateY(0); }
-        }
-      `}</style>
-    </div>
+      </Modal>
+    </>
   )
 }
 
