@@ -11,22 +11,14 @@ function LoginModal({ isOpen, onClose, onSuccess, pendingRoomId }) {
     const [loading, setLoading] = useState(false)
     const navigate = useNavigate()
 
-    // Reset form when modal opens
     useEffect(() => {
         if (isOpen) {
-            setIsLogin(true)
-            setName('')
-            setEmail('')
-            setPassword('')
-            setError('')
+            setIsLogin(true); setName(''); setEmail(''); setPassword(''); setError('')
         }
     }, [isOpen])
 
-    // Close on Escape
     useEffect(() => {
-        const handleKey = (e) => {
-            if (e.key === 'Escape') onClose()
-        }
+        const handleKey = (e) => { if (e.key === 'Escape') onClose() }
         if (isOpen) window.addEventListener('keydown', handleKey)
         return () => window.removeEventListener('keydown', handleKey)
     }, [isOpen, onClose])
@@ -35,32 +27,22 @@ function LoginModal({ isOpen, onClose, onSuccess, pendingRoomId }) {
 
     const handleSubmit = async () => {
         if (!email || !password || (!isLogin && !name)) {
-            setError('Please fill in all fields')
-            return
+            setError('Please fill in all fields'); return
         }
-        setLoading(true)
-        setError('')
+        setLoading(true); setError('')
         try {
             const endpoint = isLogin ? '/auth/login' : '/auth/register'
-            const body = isLogin
-                ? { email, password }
-                : { name, email, password }
-
+            const body = isLogin ? { email, password } : { name, email, password }
             const res = await API.post(endpoint, body)
             localStorage.setItem('token', res.data.token)
 
-            // If there was a pending room join, handle it
             if (pendingRoomId) {
-                try {
-                    await API.post('/notes/join', { roomId: pendingRoomId })
-                } catch (err) {
-                    console.log(err)
-                }
+                try { await API.post('/notes/join', { roomId: pendingRoomId }) } catch {}
                 onClose()
                 navigate(`/editor/${pendingRoomId}`)
             } else {
                 onClose()
-                if (onSuccess) onSuccess()
+                onSuccess?.()
             }
         } catch (err) {
             setError(err.response?.data?.message || 'Something went wrong')
@@ -69,58 +51,49 @@ function LoginModal({ isOpen, onClose, onSuccess, pendingRoomId }) {
         }
     }
 
-    const handleKeyDown = (e) => {
-        if (e.key === 'Enter') handleSubmit()
-    }
-
     return (
         <div
-            className="fixed inset-0 z-50 flex items-center justify-center p-4"
-            style={{ backgroundColor: 'rgba(0,0,0,0.75)', backdropFilter: 'blur(4px)' }}
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm"
             onClick={(e) => { if (e.target === e.currentTarget) onClose() }}
         >
-            <div
-                className="bg-[#111] border border-[#222] rounded-2xl p-8 w-full max-w-md relative"
-                style={{
-                    animation: 'modalIn 0.2s ease-out',
-                    boxShadow: '0 25px 60px rgba(0,0,0,0.8)'
-                }}
-            >
-                {/* Close button */}
-                <button
-                    onClick={onClose}
-                    className="absolute top-4 right-4 text-gray-600 hover:text-gray-300 transition-colors text-xl leading-none"
-                    aria-label="Close"
-                >
-                    ×
-                </button>
+            <div className="w-full max-w-sm bg-zinc-900 border border-zinc-700/60 rounded-2xl p-6 shadow-2xl animate-in fade-in zoom-in-95 duration-200">
 
                 {/* Header */}
-                <div className="mb-6">
-                    <h2 className="text-white text-2xl font-bold mb-1">Welcome to collabNotes</h2>
-                    <p className="text-gray-500 text-sm">
-                        {isLogin ? 'Sign in to continue' : 'Create an account to get started'}
-                    </p>
+                <div className="flex items-start justify-between mb-6">
+                    <div>
+                        <h2 className="text-zinc-100 text-base font-semibold mb-0.5">
+                            {isLogin ? 'Sign in' : 'Create account'}
+                        </h2>
+                        <p className="text-zinc-500 text-xs">
+                            {isLogin ? 'Welcome back to collabNotes' : 'Start collaborating for free'}
+                        </p>
+                    </div>
+                    <button
+                        onClick={onClose}
+                        className="text-zinc-600 hover:text-zinc-300 transition-colors text-lg leading-none mt-0.5"
+                    >
+                        ✕
+                    </button>
                 </div>
 
                 {/* Tab toggle */}
-                <div className="flex mb-6 bg-[#0a0a0a] rounded-lg p-1 border border-[#222]">
+                <div className="flex p-0.5 bg-black border border-zinc-800 rounded-xl mb-5">
                     <button
                         onClick={() => { setIsLogin(true); setError('') }}
-                        className={`flex-1 py-2 rounded-md text-sm font-medium transition-all ${
+                        className={`flex-1 py-2 rounded-[10px] text-xs font-medium transition-all duration-200 ${
                             isLogin
-                                ? 'bg-white text-black'
-                                : 'text-gray-500 hover:text-gray-300'
+                                ? 'bg-zinc-800 text-zinc-100 shadow-sm'
+                                : 'text-zinc-500 hover:text-zinc-300'
                         }`}
                     >
                         Sign In
                     </button>
                     <button
                         onClick={() => { setIsLogin(false); setError('') }}
-                        className={`flex-1 py-2 rounded-md text-sm font-medium transition-all ${
+                        className={`flex-1 py-2 rounded-[10px] text-xs font-medium transition-all duration-200 ${
                             !isLogin
-                                ? 'bg-white text-black'
-                                : 'text-gray-500 hover:text-gray-300'
+                                ? 'bg-zinc-800 text-zinc-100 shadow-sm'
+                                : 'text-zinc-500 hover:text-zinc-300'
                         }`}
                     >
                         Sign Up
@@ -128,56 +101,49 @@ function LoginModal({ isOpen, onClose, onSuccess, pendingRoomId }) {
                 </div>
 
                 {/* Fields */}
-                {!isLogin && (
+                <div className="flex flex-col gap-2.5 mb-4">
+                    {!isLogin && (
+                        <input
+                            type="text"
+                            placeholder="Full name"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                            onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}
+                            className="w-full bg-black border border-zinc-700 text-zinc-100 placeholder-zinc-600 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-zinc-500 transition-colors"
+                        />
+                    )}
                     <input
-                        type="text"
-                        placeholder="Full name"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                        onKeyDown={handleKeyDown}
-                        className="w-full bg-[#0a0a0a] text-gray-200 border border-[#2a2a2a] rounded-lg px-4 py-3 mb-3 text-sm outline-none focus:border-[#444] transition-colors"
+                        type="email"
+                        placeholder="Email address"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}
+                        className="w-full bg-black border border-zinc-700 text-zinc-100 placeholder-zinc-600 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-zinc-500 transition-colors"
                     />
-                )}
-
-                <input
-                    type="email"
-                    placeholder="Email address"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    onKeyDown={handleKeyDown}
-                    className="w-full bg-[#0a0a0a] text-gray-200 border border-[#2a2a2a] rounded-lg px-4 py-3 mb-3 text-sm outline-none focus:border-[#444] transition-colors"
-                />
-
-                <input
-                    type="password"
-                    placeholder="Password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    onKeyDown={handleKeyDown}
-                    className="w-full bg-[#0a0a0a] text-gray-200 border border-[#2a2a2a] rounded-lg px-4 py-3 mb-4 text-sm outline-none focus:border-[#444] transition-colors"
-                />
+                    <input
+                        type="password"
+                        placeholder="Password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}
+                        className="w-full bg-black border border-zinc-700 text-zinc-100 placeholder-zinc-600 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-zinc-500 transition-colors"
+                    />
+                </div>
 
                 {error && (
-                    <p className="text-red-400 text-sm mb-4 bg-red-500/10 border border-red-500/20 rounded-lg px-3 py-2">
+                    <div className="mb-4 px-3 py-2 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 text-xs">
                         {error}
-                    </p>
+                    </div>
                 )}
 
                 <button
                     onClick={handleSubmit}
                     disabled={loading}
-                    className="w-full bg-white text-black py-3 rounded-lg text-sm font-semibold hover:bg-gray-100 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full h-9 rounded-full text-xs font-semibold bg-white text-black hover:bg-zinc-100 active:scale-[0.98] transition-all duration-150 disabled:opacity-40 disabled:cursor-not-allowed"
                 >
-                    {loading ? 'Please wait...' : isLogin ? 'Sign In' : 'Create Account'}
+                    {loading ? 'Please wait…' : isLogin ? 'Sign In' : 'Create Account'}
                 </button>
             </div>
-
-            <style>{`
-                @keyframes modalIn {
-                    from { opacity: 0; transform: scale(0.96) translateY(8px); }
-                    to   { opacity: 1; transform: scale(1)    translateY(0); }
-                }
-            `}</style>
         </div>
     )
 }
