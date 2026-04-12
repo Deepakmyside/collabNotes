@@ -3,14 +3,16 @@ import { useParams, useNavigate } from 'react-router-dom'
 import API from '../api/axios'
 import socket from '../socket/socket'
 import OnlineUsers from '../components/OnlineUsers'
+
 function Editor() {
     const { roomId } = useParams()
-    console.log('roomId:', roomId)
     const navigate = useNavigate()
     const [title, setTitle] = useState('')
     const [content, setContent] = useState('')
     const [onlineUsers, setOnlineUsers] = useState([1])
     const [saving, setSaving] = useState(false)
+    const [copied, setCopied] = useState(false)
+    const [savedFlash, setSavedFlash] = useState(false)
 
     useEffect(() => {
         fetchNote()
@@ -22,10 +24,7 @@ function Editor() {
             if (title !== undefined) setTitle(title)
         })
 
-        socket.on('room-users', (count) => {
-              console.log('room-users received:', count)
-            setOnlineUsers(count)
-        })
+        socket.on('room-users', (count) => setOnlineUsers(count))
 
         return () => {
             socket.off('note-change')
@@ -39,9 +38,7 @@ function Editor() {
             const res = await API.get(`/notes/${roomId}`)
             setTitle(res.data.title)
             setContent(res.data.content)
-        } catch (err) {
-            console.log(err)
-        }
+        } catch (err) { console.log(err) }
     }
 
     const handleContentChange = (e) => {
@@ -55,87 +52,93 @@ function Editor() {
     }
 
     const saveNote = async () => {
-
         const token = localStorage.getItem('token')
-
-        if(!token) {
-            // redirect  to login
-        localStorage.setItem('redirectAfterLogin', `/dashboard`)
-        navigate('/')
-        return
-    
+        if (!token) {
+            localStorage.setItem('redirectAfterLogin', `/dashboard`)
+            navigate('/')
+            return
         }
-
         setSaving(true)
         try {
             await API.put(`/notes/${roomId}`, { title, content })
-            navigate('/dashboard')
-        } catch (err) {
-            console.log(err)
-        }
+            setSavedFlash(true)
+            setTimeout(() => { setSavedFlash(false); navigate('/') }, 1000)
+        } catch (err) { console.log(err) }
         setSaving(false)
     }
-    
-    const shareNote = () => {
-        const link = `${window.location.origin}/editor/${roomId}`
-        navigator.clipboard.writeText(link)
-        alert('Link  copied!')
+
+    const copyRoomId = () => {
+        navigator.clipboard.writeText(roomId)
+        setCopied(true)
+        setTimeout(() => setCopied(false), 2000)
     }
+
     return (
-        <div className="min-h-screen bg-[#0a0a0a] text-white flex flex-col">
-            
-            <div className="border-b border-[#222] px-6 py-3 flex items-center justify-between">
-                <button
-                    onClick={() => navigate('/dashboard')}
-                    className="text-gray-400 text-sm hover:text-white transition-all"
-                >
-                    ← Back
-                </button>
-                <div className="flex items-center gap-4">
-                    <OnlineUsers users={onlineUsers} />
-                    
-                  <div className="flex items-center gap-2 border border-[#333] px-3 py-2 rounded-lg text-sm text-gray-300">
-    
-    <span className="text-gray-500">Room:</span>
-    
-    <span className="font-mono text-white">{roomId}</span>
+        <div className="min-h-screen bg-black text-white flex flex-col">
 
-    <button
-        onClick={() => {
-            navigator.clipboard.writeText(roomId)
-            alert("Room ID copied!")
-        }}
-        className="text-gray-400 hover:text-white transition-all text-xs"
-    >
-        Copy
-    </button>
+            {/* ── Top bar ── */}
+            <header className="sticky top-0 z-40 border-b border-zinc-800/60 bg-black/80 backdrop-blur-xl">
+                <div className="px-6 h-14 flex items-center justify-between gap-4">
 
-</div>
-
+                    {/* Left: back */}
                     <button
-                        onClick={saveNote}
-                        className="bg-white text-black px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-200 transition-all"
+                        onClick={() => navigate('/')}
+                        className="flex items-center gap-1.5 text-zinc-500 hover:text-zinc-200 text-xs transition-colors duration-150 shrink-0"
                     >
-                        {saving ? 'Saving...' : 'Save'}
+                        <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+                        </svg>
+                        Back
                     </button>
-                </div>
-            </div>
 
-            <div className="max-w-3xl mx-auto w-full px-6 py-8 flex flex-col flex-1">
+                    {/* Center: room pill */}
+                    <button
+                        onClick={copyRoomId}
+                        className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-zinc-800 hover:border-zinc-600 bg-zinc-900/60 hover:bg-zinc-800/60 transition-all duration-150 group"
+                    >
+                        <span className="text-zinc-500 text-xs">Room</span>
+                        <span className="text-zinc-300 text-xs font-mono">{roomId?.slice(0, 10)}…</span>
+                        <span className={`text-xs transition-colors duration-150 ${copied ? 'text-green-400' : 'text-zinc-600 group-hover:text-zinc-400'}`}>
+                            {copied ? '✓' : '⎘'}
+                        </span>
+                    </button>
+
+                    {/* Right */}
+                    <div className="flex items-center gap-3 shrink-0">
+                        <OnlineUsers users={onlineUsers} />
+
+                        <button
+                            onClick={saveNote}
+                            disabled={saving}
+                            className={`h-8 px-4 rounded-full text-xs font-semibold transition-all duration-150 disabled:opacity-40 disabled:cursor-not-allowed ${
+                                savedFlash
+                                    ? 'bg-green-500 text-white'
+                                    : 'bg-white text-black hover:bg-zinc-100 active:scale-[0.97]'
+                            }`}
+                        >
+                            {savedFlash ? '✓ Saved' : saving ? 'Saving…' : 'Save'}
+                        </button>
+                    </div>
+                </div>
+            </header>
+
+            {/* ── Editor body ── */}
+            <main className="flex-1 max-w-3xl mx-auto w-full px-6 py-10 flex flex-col">
                 <input
                     type="text"
                     value={title}
                     onChange={handleTitleChange}
                     placeholder="Untitled"
-                    className="bg-transparent text-3xl font-bold text-white outline-none mb-6 placeholder-gray-700"
+                    className="bg-transparent text-2xl font-bold text-zinc-100 outline-none mb-6 placeholder-zinc-700 tracking-tight w-full"
                 />
+                <div className="w-8 h-px bg-zinc-800 mb-6" />
                 <textarea
                     value={content}
                     onChange={handleContentChange}
-                    placeholder="Start writing..."
-                    className="bg-transparent text-gray-300 outline-none flex-1 resize-none text-base leading-relaxed placeholder-gray-700"
+                    placeholder="Start writing…"
+                    className="bg-transparent text-zinc-400 text-sm leading-7 outline-none flex-1 resize-none placeholder-zinc-700 w-full"
                 />
-            </div>
+            </main>
         </div>
     )
 }
