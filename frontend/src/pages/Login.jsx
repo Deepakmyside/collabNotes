@@ -22,7 +22,11 @@ function Login() {
 
             const redirect = localStorage.getItem('redirectAfterLogin')
             localStorage.removeItem('redirectAfterLogin')
-            navigate(redirect || '/dashboard')
+            if(redirect){
+                navigate(redirect)
+            }else{
+                navigate('/dashboard')
+            }
         } catch (err) {
             setError(err.response?.data?.message || 'Something went wrong')
         }

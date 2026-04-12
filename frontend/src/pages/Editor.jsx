@@ -3,7 +3,6 @@ import { useParams, useNavigate } from 'react-router-dom'
 import API from '../api/axios'
 import socket from '../socket/socket'
 import OnlineUsers from '../components/OnlineUsers'
-
 function Editor() {
     const { roomId } = useParams()
     console.log('roomId:', roomId)
@@ -56,6 +55,17 @@ function Editor() {
     }
 
     const saveNote = async () => {
+
+        const token = localStorage.getItem('token')
+
+        if(!token) {
+            // redirect  to login
+        localStorage.setItem('redirectAfterLogin', `/dashboard`)
+        navigate('/')
+        return
+    
+        }
+
         setSaving(true)
         try {
             await API.put(`/notes/${roomId}`, { title, content })
@@ -84,9 +94,23 @@ function Editor() {
                 <div className="flex items-center gap-4">
                     <OnlineUsers users={onlineUsers} />
                     
-                    <button 
-                    onClick={shareNote}
-                    className='border border-[#333] text-gray-300 px-4 py-2 rounded-lg text-sm hover:border-gray-500 transition-all'>Share</button>
+                  <div className="flex items-center gap-2 border border-[#333] px-3 py-2 rounded-lg text-sm text-gray-300">
+    
+    <span className="text-gray-500">Room:</span>
+    
+    <span className="font-mono text-white">{roomId}</span>
+
+    <button
+        onClick={() => {
+            navigator.clipboard.writeText(roomId)
+            alert("Room ID copied!")
+        }}
+        className="text-gray-400 hover:text-white transition-all text-xs"
+    >
+        Copy
+    </button>
+
+</div>
 
                     <button
                         onClick={saveNote}
