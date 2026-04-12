@@ -36,9 +36,10 @@ const optionalAuth = (req, res, next) => {
     next()
   } catch(error) {
     
+     next()
   }
 
-  next()
+ 
 }
 
 module.exports = { requireAuth, optionalAuth}

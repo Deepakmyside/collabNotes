@@ -14,7 +14,7 @@ const createNote = async (req, res) => {
              collaborators: [],
              roomId
             })
-         res.status(201).json({note})
+         return  res.status(201).json({note})
 
     } catch (error) {
          console.error("Create Note Error", error)
@@ -29,7 +29,7 @@ const getAllNotes = async (req, res) => {
         if(!userId){
             return res.status(200).json([])
          }
-         
+
         const note = await Note.find({
             $or: [
                 { owner: userId},
@@ -37,7 +37,7 @@ const getAllNotes = async (req, res) => {
             ]
         })
          
-        res.status(200).json(note)
+     return   res.status(200).json(note)
     
     }catch (error) {
         console.error("Get Notes Error",error)
@@ -54,7 +54,7 @@ const getNoteById = async (req, res) => {
             return res.status(404).json({ message:'Note not found or deleted '})
         }
 
-        res.status(200).json(note)
+    return    res.status(200).json(note)
     } catch (error) {
         console.error("Get NoteById error",error)
         res.status(500).json({message:"Unable to fetch note"})
@@ -82,7 +82,7 @@ const updateNote = async (req, res) => {
 
         await note.save()
 
-        res.status(200).json(note)
+     return   res.status(200).json(note)
 
     } catch (error) {
         console.error("Update Note Error",error)
@@ -105,7 +105,7 @@ const deleteNote = async (req, res) => {
 
          await note.deleteOne({ roomId: req.params.roomId})
 
-         res.status(200).json({ message: "Note deleted succesfully"})
+      return   res.status(200).json({ message: "Note deleted succesfully"})
 
     } catch (error) {
         console.error("Delete Note Error",error)
@@ -139,7 +139,7 @@ const joinRoom = async (req, res)  => {
            note.collaborators.push(userId)
            await note.save()
 
-           res.status(200).json({ message: "Joined successfully", roomId: note.roomId})
+        return   res.status(200).json({ message: "Joined successfully", roomId: note.roomId})
     
       }catch(error){
         console.error("Join Room Error", error);
