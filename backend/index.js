@@ -5,6 +5,10 @@ const app = express()
 const http = require('http')
 const { Server} = require('socket.io')
 const server = http.createServer(app)
+const session = require('express-session')
+const passport = require('passport')
+require('./config/passport')
+
 const io = new Server(server, {
     cors: {
         origin: "*"
@@ -26,8 +30,21 @@ app.use(cors({
 const authRouter = require("./routes/authRoutes")
 const noteRouter = require("./routes/noteRoutes")
 
+
+
+app.use(session({
+  secret: 'secret',
+  resave: false,
+  saveUninitialized: true
+}))
+
+app.use(passport.initialize())
+app.use(passport.session())
+
 app.use("/api/auth", authRouter)
 app.use("/api/notes", noteRouter)
+
+
 
 socketHandler(io)
 connectDB()
