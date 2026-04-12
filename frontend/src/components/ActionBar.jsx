@@ -32,21 +32,27 @@ function ActionBar({ onCreate, onJoin, onAuthRequired }) {
 
   return (
     <>
-      <div className="mb-10 flex items-center gap-2">
-        {/* New Note */}
+      <div className="mb-10 flex items-center gap-3">
+        {/* New Note – primary white */}
         <button
           onClick={handleNewNote}
-          className="h-9 px-4 rounded-full text-xs font-semibold bg-white text-black hover:bg-zinc-100 active:scale-[0.97] transition-all duration-150"
+          className="group inline-flex items-center gap-1.5 h-9 px-5 rounded-xl text-xs font-semibold bg-white text-black hover:bg-zinc-100 active:scale-[0.96] transition-all duration-200"
         >
-          + New Note
+          <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
+          </svg>
+          New Note
         </button>
 
-        {/* Join Note */}
+        {/* Join Session – zinc border */}
         <button
           onClick={handleJoinClick}
-          className="h-9 px-4 rounded-full text-xs font-medium text-zinc-300 border border-zinc-700 hover:border-zinc-500 hover:text-zinc-100 active:scale-[0.97] transition-all duration-150"
+          className="group inline-flex items-center gap-1.5 h-9 px-5 rounded-xl text-xs font-medium text-zinc-400 border border-zinc-700 hover:border-zinc-500 hover:text-zinc-100 active:scale-[0.96] transition-all duration-200"
         >
-          Join Session
+          <svg className="w-3.5 h-3.5 opacity-60 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+          </svg>
+          <span>Join Session</span>
         </button>
       </div>
 
