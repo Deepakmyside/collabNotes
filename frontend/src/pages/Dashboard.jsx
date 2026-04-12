@@ -13,25 +13,19 @@ function Dashboard() {
     const [showLoginModal, setShowLoginModal] = useState(false)
     const [pendingRoomId, setPendingRoomId] = useState(null)
     const navigate = useNavigate()
+    const isLoggedIn = !!localStorage.getItem('token')
 
-    useEffect(() => {
-        fetchNotes()
-    }, [])
+    useEffect(() => { fetchNotes() }, [])
 
     const fetchNotes = async () => {
         try {
             const token = localStorage.getItem('token')
-            if (!token) {
-                setNotes([])
-                setLoading(false)
-                return
-            }
+            if (!token) { setNotes([]); setLoading(false); return }
             const res = await API.get('/notes')
             setNotes(res.data)
             setLoading(false)
         } catch (err) {
-            console.log(err)
-            setLoading(false)
+            console.log(err); setLoading(false)
         }
     }
 
@@ -39,9 +33,7 @@ function Dashboard() {
         try {
             await API.delete(`/notes/${roomId}`)
             setNotes(notes.filter(note => note.roomId !== roomId))
-        } catch (err) {
-            console.log(err)
-        }
+        } catch (err) { console.log(err) }
     }
 
     const handleAuthRequired = (roomId = null) => {
@@ -55,94 +47,95 @@ function Dashboard() {
         fetchNotes()
     }
 
-    const isLoggedIn = !!localStorage.getItem('token')
-
     return (
-        <div className="min-h-screen bg-[#0a0a0a] text-white flex flex-col">
-
+        <div className="min-h-screen bg-black text-white flex flex-col">
             <Navbar onLoginClick={() => setShowLoginModal(true)} />
 
-            <div className="max-w-5xl mx-auto px-6 py-10 flex-1 w-full">
+            <main className="flex-1 max-w-5xl mx-auto w-full px-6 py-12">
 
-                {/* Hero / Header */}
-                <div className="mb-10 pt-2">
-                    <h2 className="text-3xl font-bold text-white mb-2 tracking-tight">
-                        {isLoggedIn ? 'Your Workspace' : 'Collaborative Notes'}
-                    </h2>
-                    <p className="text-gray-500 text-sm">
-                        {isLoggedIn
-                            ? 'Your notes, all in one place.'
-                            : 'Sign in to create and collaborate on notes in real time.'}
-                    </p>
+                {/* ── Hero ── */}
+                <div className="mb-10">
+                    {isLoggedIn ? (
+                        <>
+                            <h1 className="text-2xl font-semibold text-zinc-100 tracking-tight mb-1">
+                                Workspace
+                            </h1>
+                            <p className="text-zinc-500 text-sm">Your notes, all in one place.</p>
+                        </>
+                    ) : (
+                        <>
+                            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-zinc-800 bg-zinc-900/60 text-zinc-400 text-xs mb-5">
+                                <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
+                                Real-time collaboration
+                            </div>
+                            <h1 className="text-3xl font-bold text-zinc-100 tracking-tight mb-3 leading-tight">
+                                Notes that think<br />
+                                <span className="text-zinc-500">together.</span>
+                            </h1>
+                            <p className="text-zinc-500 text-sm max-w-sm leading-relaxed">
+                                Create, share and edit notes with your team — live, no setup required.
+                            </p>
+                        </>
+                    )}
                 </div>
 
+                {/* ── ActionBar ── */}
                 <ActionBar
                     onAuthRequired={() => handleAuthRequired(null)}
                     onCreate={async (title) => {
                         try {
                             const res = await API.post('/notes', { title, content: '' })
                             setNotes(prev => [res.data.note, ...prev])
-                        } catch (err) {
-                            console.log(err)
-                        }
+                        } catch (err) { console.log(err) }
                     }}
                     onJoin={async (roomId) => {
-                        const token = localStorage.getItem('token')
-                        if (!token) {
-                            handleAuthRequired(roomId)
-                            return
+                        if (!localStorage.getItem('token')) {
+                            handleAuthRequired(roomId); return
                         }
                         try {
                             await API.post('/notes/join', { roomId })
                             navigate(`/editor/${roomId}`)
-                        } catch (err) {
-                            console.log(err)
-                        }
+                        } catch (err) { console.log(err) }
                     }}
                 />
 
-                {/* Notes Grid */}
+                {/* ── Notes area ── */}
                 {loading ? (
-                    <div className="flex items-center gap-2 text-gray-600 text-sm pt-4">
-                        <span className="inline-block w-4 h-4 border-2 border-gray-600 border-t-gray-400 rounded-full animate-spin"></span>
-                        Loading notes...
+                    <div className="flex items-center gap-2.5 text-zinc-600 text-sm">
+                        <svg className="w-4 h-4 animate-spin" viewBox="0 0 24 24" fill="none">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
+                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4l3-3-3-3v4a8 8 0 00-8 8h4z"/>
+                        </svg>
+                        Loading…
                     </div>
                 ) : !isLoggedIn ? (
-                    <div className="border border-dashed border-[#222] rounded-2xl p-12 text-center mt-4">
-                        <p className="text-gray-600 text-sm mb-4">Sign in to see your notes here</p>
+                    <div className="border border-dashed border-zinc-800 rounded-2xl p-14 text-center">
+                        <p className="text-zinc-600 text-sm mb-5">Sign in to see your notes here</p>
                         <button
                             onClick={() => setShowLoginModal(true)}
-                            className="text-sm bg-white text-black px-5 py-2.5 rounded-lg font-medium hover:bg-gray-100 transition-all"
+                            className="h-9 px-5 rounded-full text-xs font-semibold bg-white text-black hover:bg-zinc-100 transition-all duration-150"
                         >
-                            Get started
+                            Get started →
                         </button>
                     </div>
                 ) : notes.length === 0 ? (
-                    <div className="border border-dashed border-[#222] rounded-2xl p-12 text-center mt-4">
-                        <p className="text-gray-600 text-sm">No notes yet — create your first one ↑</p>
+                    <div className="border border-dashed border-zinc-800 rounded-2xl p-14 text-center">
+                        <p className="text-zinc-600 text-sm">No notes yet — create your first one above ↑</p>
                     </div>
                 ) : (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                         {notes.map(note => (
-                            <NoteCard
-                                key={note._id}
-                                note={note}
-                                onDelete={deleteNote}
-                            />
+                            <NoteCard key={note._id} note={note} onDelete={deleteNote} />
                         ))}
                     </div>
                 )}
-            </div>
+            </main>
 
             <Footer />
 
-            {/* Login Modal */}
             <LoginModal
                 isOpen={showLoginModal}
-                onClose={() => {
-                    setShowLoginModal(false)
-                    setPendingRoomId(null)
-                }}
+                onClose={() => { setShowLoginModal(false); setPendingRoomId(null) }}
                 onSuccess={handleLoginSuccess}
                 pendingRoomId={pendingRoomId}
             />
