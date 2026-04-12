@@ -13,7 +13,8 @@ const noteSchema = mongoose.Schema({
     owner: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
-        required: true
+        required: false,
+        default: null
     },
     collaborators: [{
         type: mongoose.Schema.Types.ObjectId,
