@@ -13,7 +13,7 @@ const googleCallback = [
   (req, res) => {
     try {
       if (!req.user) {
-        return res.redirect('${CLIENT_URL}/?error=auth_failed')
+        return res.redirect(`${CLIENT_URL}/?error=auth_failed`)
       }
 
       const token = jwt.sign(
@@ -25,7 +25,7 @@ const googleCallback = [
       res.redirect(`${CLIENT_URL}/oauth-success?token=${token}`)
     } catch (err) {
       console.log("OAuth Error:", err)
-      res.redirect('${CLIENT_URL}/?error=server_error')
+      res.redirect(`${CLIENT_URL}/?error=server_error`)
     }
   }
 ]
