@@ -7,12 +7,13 @@ const googleAuth = passport.authenticate('google', {
 })
 
 // 🔹 Step 2: Google callback handler
+const CLIENT_URL = process.env.CLIENT_URL
 const googleCallback = [
   passport.authenticate('google', { session: false }),
   (req, res) => {
     try {
       if (!req.user) {
-        return res.redirect('http://localhost:5173/?error=auth_failed')
+        return res.redirect('${CLIENT_URL}/?error=auth_failed')
       }
 
       const token = jwt.sign(
@@ -21,10 +22,10 @@ const googleCallback = [
         { expiresIn: '7d' }
       )
 
-      res.redirect(`http://localhost:5173/oauth-success?token=${token}`)
+      res.redirect(`${CLIENT_URL}/oauth-success?token=${token}`)
     } catch (err) {
       console.log("OAuth Error:", err)
-      res.redirect('http://localhost:5173/?error=server_error')
+      res.redirect('${CLIENT_URL}/?error=server_error')
     }
   }
 ]
