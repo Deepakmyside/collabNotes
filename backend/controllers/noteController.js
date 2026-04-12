@@ -5,7 +5,7 @@ const { create } = require('../models/User')
 const createNote = async (req, res) => {
        try {
         const { title, content} = req.body
-        const roomId = `room_${Date.now()}_${Math.floor(Math.random() * 10000)}`
+        const roomId = Math.random().toString(36).substring(2, 8).toUpperCase()
 
         const note = await Note.create({
              title,

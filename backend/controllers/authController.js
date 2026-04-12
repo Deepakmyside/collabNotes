@@ -23,8 +23,8 @@ const register = async (req, res) => {
         )
         res.status(201).json({ token, user: {id: user._id, name: user.name, email: user.email}})
     } catch(error) {
-        // console.log(error)
-        res.status(500).json({message: 'Server error', error })
+        console.error("Email Register error", error)
+        res.status(500).json({message:"Unable to Register" })
     }
 }
 
@@ -52,7 +52,8 @@ const login = async (req, res) => {
          res.status(200).json({token, user:{ id: user._id, email : user.email, name: user.name}})
     
     }catch (error){
-        res.status(500).json({message:'Server error', error })
+        console.error("Email Login  Error", error)
+        res.status(500).json({message:"Unable to Login" })
     }
 }
 
