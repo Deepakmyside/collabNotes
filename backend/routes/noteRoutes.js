@@ -3,10 +3,10 @@ const { createNote, getAllNotes, getNoteById, updateNote, deleteNote} = require(
 const authMiddleware = require('../middleware/authMiddleware')
 const router = express.Router()
 
-router.post("/", authMiddleware, createNote)
-router.get("/", authMiddleware, getAllNotes)
-router.get("/:roomId", authMiddleware, getNoteById)
-router.put("/:roomId", authMiddleware, updateNote)
-router.delete("/:roomId", authMiddleware, deleteNote)
+router.post("/", authMiddleware.optionalAuth, createNote)
+router.get("/", authMiddleware.requireAuth, getAllNotes)
+router.get("/:roomId", authMiddleware.requireAuth, getNoteById)
+router.put("/:roomId", authMiddleware.requireAuth, updateNote)
+router.delete("/:roomId", authMiddleware.requireAuth, deleteNote)
 
 module.exports = router
