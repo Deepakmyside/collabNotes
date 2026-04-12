@@ -13,7 +13,7 @@ function Editor() {
     const [saving, setSaving] = useState(false)
     const [copied, setCopied] = useState(false)
     const [savedFlash, setSavedFlash] = useState(false)
-
+    const [loading, setLoading]= useState(true)
     useEffect(() => {
         fetchNote()
         socket.connect()
@@ -38,9 +38,14 @@ function Editor() {
             const res = await API.get(`/notes/${roomId}`)
             setTitle(res.data.title)
             setContent(res.data.content)
-        } catch (err) { console.log(err) }
+        } catch (err) { console.log(err) 
+
+        }finally {
+        setLoading(false)
     }
 
+
+    } 
     const handleContentChange = (e) => {
         setContent(e.target.value)
         socket.emit('note-change', { roomId, content: e.target.value, title })
@@ -72,7 +77,11 @@ function Editor() {
         setCopied(true)
         setTimeout(() => setCopied(false), 2000)
     }
-
+     if (loading) return (
+    <div className="min-h-screen flex items-center justify-center" style={{ background: '#111113' }}>
+        <div className="text-zinc-600 text-sm">Loading note...</div>
+    </div>
+)
     return (
         <div className="min-h-screen text-white flex flex-col" style={{ background: '#111113' }}>
 
