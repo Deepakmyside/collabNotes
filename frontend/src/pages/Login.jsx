@@ -20,13 +20,23 @@ function Login() {
             const res = await API.post(endpoint, body)
             localStorage.setItem('token', res.data.token)
 
+            const pendingRoomId = localStorage.getItem('pendingRoomId')
             const redirect = localStorage.getItem('redirectAfterLogin')
+            
             localStorage.removeItem('redirectAfterLogin')
-            if(redirect){
-                navigate(redirect)
-            }else{
-                navigate('/dashboard')
+            localStorage.removeItem('pendingRoomId')
+
+            if (pendingRoomId) {
+                try {
+                    await API.post('/notes/join', { roomId: pendingRoomId })
+                } catch (err) {
+                    console.log(err)
+                }
+                navigate(`/editor/${pendingRoomId}`)
+            } else {
+                navigate(redirect || '/dashboard')
             }
+
         } catch (err) {
             setError(err.response?.data?.message || 'Something went wrong')
         }
@@ -93,8 +103,6 @@ function Login() {
                     className="w-full bg-white text-black py-3 rounded-lg text-sm font-medium hover:bg-gray-200 transition-all"
                 >
                     {isLogin ? 'Sign In' : 'Create Account'}
-
-
                 </button>
             </div>
         </div>

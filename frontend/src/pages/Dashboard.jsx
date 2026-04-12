@@ -17,6 +17,14 @@ function Dashboard() {
 
     const fetchNotes = async () => {
         try {
+
+            const token = localStorage.getItem('token')
+
+            if(!token) {
+                setNotes([])
+                setLoading(false)
+            }
+            
             const res = await API.get('/notes')
             setNotes(res.data)
             setLoading(false)
@@ -52,7 +60,7 @@ function Dashboard() {
                  onCreate={async (title) => {
                    try {
                      const res = await API.post('/notes', { title, content: '' })
-                     await fetchNotes()
+                    
                      setNotes(prev => [res.data.note, ...prev])
                      
                    } catch (err) {

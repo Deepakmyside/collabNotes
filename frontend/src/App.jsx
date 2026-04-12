@@ -16,17 +16,14 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Login/>} />
-        <Route path="/dashboard" element={
-          <PrivateRoute>
-            <Dashboard />
-          </PrivateRoute>
-        }/>
+        <Route path="/" element={<Dashboard/>} />
+        <Route path="/" element={<Login/>}/>
         <Route path="/editor/:roomId" element={
           <PrivateRoute>
             <Editor/>
           </PrivateRoute>
         }/>
+     <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
   )
