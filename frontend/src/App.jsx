@@ -1,5 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate} from 'react-router-dom'
-import Login from './pages/Login'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import Dashboard from './pages/Dashboard'
 import Editor from './pages/Editor'
 
@@ -16,14 +15,14 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Dashboard/>} />
-        <Route path="/" element={<Login/>}/>
+        {/* Home is always the Dashboard — auth modal appears inside */}
+        <Route path="/" element={<Dashboard />} />
         <Route path="/editor/:roomId" element={
           <PrivateRoute>
-            <Editor/>
+            <Editor />
           </PrivateRoute>
-        }/>
-     <Route path="*" element={<Navigate to="/" replace />} />
+        } />
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
   )
