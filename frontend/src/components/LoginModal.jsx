@@ -13,7 +13,11 @@ function LoginModal({ isOpen, onClose, onSuccess, pendingRoomId }) {
 
     useEffect(() => {
         if (isOpen) {
-            setIsLogin(true); setName(''); setEmail(''); setPassword(''); setError('')
+            setIsLogin(true)
+            setName('')
+            setEmail('')
+            setPassword('')
+            setError('')
         }
     }, [isOpen])
 
@@ -27,28 +31,44 @@ function LoginModal({ isOpen, onClose, onSuccess, pendingRoomId }) {
 
     const handleSubmit = async () => {
         if (!email || !password || (!isLogin && !name)) {
-            setError('Please fill in all fields'); return
+            setError('Please fill in all fields')
+            return
         }
-        setLoading(true); setError('')
+
+        setLoading(true)
+        setError('')
+
         try {
             const endpoint = isLogin ? '/auth/login' : '/auth/register'
             const body = isLogin ? { email, password } : { name, email, password }
+
             const res = await API.post(endpoint, body)
             localStorage.setItem('token', res.data.token)
 
             if (pendingRoomId) {
-                try { await API.post('/notes/join', { roomId: pendingRoomId }) } catch {}
+                try {
+                    await API.post('/notes/join', { roomId: pendingRoomId })
+                } catch {}
                 onClose()
                 navigate(`/editor/${pendingRoomId}`)
             } else {
                 onClose()
                 onSuccess?.()
             }
+
         } catch (err) {
             setError(err.response?.data?.message || 'Something went wrong')
         } finally {
             setLoading(false)
         }
+    }
+
+    // 🔥 GOOGLE LOGIN HANDLER
+    const handleGoogleLogin = () => {
+        if (pendingRoomId) {
+            localStorage.setItem('pendingRoomId', pendingRoomId)
+        }
+        window.location.href = "http://localhost:3000/api/auth/google"
     }
 
     return (
@@ -136,6 +156,27 @@ function LoginModal({ isOpen, onClose, onSuccess, pendingRoomId }) {
                     </div>
                 )}
 
+                {/* 🔥 GOOGLE LOGIN BUTTON */}
+                <button
+                    onClick={handleGoogleLogin}
+                    className="w-full flex items-center justify-center gap-2 bg-black border border-zinc-700 text-zinc-200 rounded-full h-9 text-xs font-medium hover:border-zinc-500 transition-all duration-150 mb-3"
+                >
+                    <img 
+                        src="https://www.svgrepo.com/show/475656/google-color.svg" 
+                        alt="google" 
+                        className="w-4 h-4"
+                    />
+                    Continue with Google
+                </button>
+
+                {/* Divider */}
+                <div className="flex items-center gap-2 mb-3">
+                    <div className="flex-1 h-px bg-zinc-700" />
+                    <span className="text-zinc-500 text-[10px]">OR</span>
+                    <div className="flex-1 h-px bg-zinc-700" />
+                </div>
+
+                {/* Email Auth */}
                 <button
                     onClick={handleSubmit}
                     disabled={loading}
