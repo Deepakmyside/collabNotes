@@ -11,7 +11,7 @@ function Navbar({ onLoginClick }) {
     }
 
     return (
-        <header className="sticky top-0 z-40 border-b border-zinc-800/60 bg-black/60 backdrop-blur-xl">
+                    <header className="sticky top-0 z-40 border-b border-zinc-800/60 backdrop-blur-xl" style={{ background: 'rgba(17,17,19,0.8)' }}>
             <div className="max-w-5xl mx-auto px-6 h-14 flex items-center justify-between">
 
                 {/* Logo */}
@@ -37,7 +37,7 @@ function Navbar({ onLoginClick }) {
                     ) : (
                         <button
                             onClick={onLoginClick}
-                            className="h-8 px-4 rounded-full text-xs font-semibold bg-white text-black hover:bg-zinc-100 transition-all duration-200"
+                            className="h-8 px-4 rounded-full text-xs font-semibold bg-zinc-200 text-zinc-900 hover:bg-zinc-300 transition-all duration-200"
                         >
                             Sign in
                         </button>

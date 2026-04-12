@@ -74,46 +74,64 @@ function Editor() {
     }
 
     return (
-        <div className="min-h-screen bg-black text-white flex flex-col">
+        <div className="min-h-screen text-white flex flex-col" style={{ background: '#111113' }}>
 
             {/* ── Top bar ── */}
             <header className="sticky top-0 z-40 border-b border-zinc-800/60 bg-black/80 backdrop-blur-xl">
-                <div className="px-6 h-14 flex items-center justify-between gap-4">
+                <div className="px-4 sm:px-6 h-14 flex items-center justify-between gap-2 sm:gap-4">
 
                     {/* Left: back */}
                     <button
                         onClick={() => navigate('/')}
-                        className="flex items-center gap-1.5 text-zinc-500 hover:text-zinc-200 text-xs transition-colors duration-150 shrink-0"
+                        className="cursor-pointer flex items-center gap-1.5 text-zinc-500 hover:text-zinc-200 text-xs transition-colors duration-150 shrink-0"
                     >
                         <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                             <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
                         </svg>
-                        Back
+                        <span className="hidden sm:inline">Back</span>
                     </button>
 
-                    {/* Center: room pill */}
+                    {/* Center: room pill — full on sm+, icon-only on mobile */}
                     <button
                         onClick={copyRoomId}
-                        className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-zinc-800 hover:border-zinc-600 bg-zinc-900/60 hover:bg-zinc-800/60 transition-all duration-150 group"
+                        className="cursor-pointer flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1.5 rounded-full border border-zinc-800 hover:border-zinc-600 bg-zinc-900/60 hover:bg-zinc-800/60 transition-all duration-150 group min-w-0"
+                        title={copied ? 'Copied!' : 'Copy room code'}
                     >
-                        <span className="text-zinc-500 text-xs">Room</span>
-                        <span className="text-zinc-300 text-xs font-mono">{roomId?.slice(0, 10)}…</span>
-                        <span className={`text-xs transition-colors duration-150 ${copied ? 'text-green-400' : 'text-zinc-600 group-hover:text-zinc-400'}`}>
-                            {copied ? '✓' : '⎘'}
+                        {/* Label + code: visible sm+ only */}
+                        <span className="hidden sm:inline text-zinc-500 text-xs shrink-0">Room</span>
+                        <span className="hidden sm:inline text-zinc-300 text-xs font-mono truncate max-w-[120px]">{roomId?.slice(0, 10)}…</span>
+
+                        {/* Copy icon — always visible */}
+                        <span className={`text-xs transition-colors duration-150 ${copied ? 'text-green-400' : 'text-zinc-500 group-hover:text-zinc-300'}`}>
+                            {copied ? (
+                                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                </svg>
+                            ) : (
+                                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                                </svg>
+                            )}
                         </span>
+
+                        {/* Mobile: show short code next to icon */}
+                        <span className="sm:hidden text-zinc-500 text-[10px] font-mono">{roomId?.slice(0, 6)}</span>
                     </button>
 
                     {/* Right */}
-                    <div className="flex items-center gap-3 shrink-0">
-                        <OnlineUsers users={onlineUsers} />
+                    <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+                        {/* Online users — hide on mobile to save space */}
+                        <span className="hidden sm:flex">
+                            <OnlineUsers users={onlineUsers} />
+                        </span>
 
                         <button
                             onClick={saveNote}
                             disabled={saving}
-                            className={`h-8 px-4 rounded-full text-xs font-semibold transition-all duration-150 disabled:opacity-40 disabled:cursor-not-allowed ${
+                            className={`cursor-pointer h-8 px-3 sm:px-4 rounded-full text-xs font-semibold transition-all duration-150 disabled:opacity-40 disabled:cursor-not-allowed ${
                                 savedFlash
                                     ? 'bg-green-500 text-white'
-                                    : 'bg-white text-black hover:bg-zinc-100 active:scale-[0.97]'
+                                    : 'bg-zinc-200 text-zinc-900 hover:bg-zinc-300 active:scale-[0.97]'
                             }`}
                         >
                             {savedFlash ? '✓ Saved' : saving ? 'Saving…' : 'Save'}
@@ -122,22 +140,30 @@ function Editor() {
                 </div>
             </header>
 
-            {/* ── Editor body ── */}
-            <main className="flex-1 max-w-3xl mx-auto w-full px-6 py-10 flex flex-col">
-                <input
-                    type="text"
-                    value={title}
-                    onChange={handleTitleChange}
-                    placeholder="Untitled"
-                    className="bg-transparent text-2xl font-bold text-zinc-100 outline-none mb-6 placeholder-zinc-700 tracking-tight w-full"
-                />
-                <div className="w-8 h-px bg-zinc-800 mb-6" />
-                <textarea
-                    value={content}
-                    onChange={handleContentChange}
-                    placeholder="Start writing…"
-                    className="bg-transparent text-zinc-400 text-sm leading-7 outline-none flex-1 resize-none placeholder-zinc-700 w-full"
-                />
+            {/* ── Editor body — full-bleed writing surface ── */}
+            <main className="flex-1 flex flex-col" style={{ background: '#141416' }}>
+                <div className="max-w-3xl mx-auto w-full px-5 sm:px-8 flex-1 flex flex-col py-8 sm:py-10">
+
+                    {/* Title */}
+                    <input
+                        type="text"
+                        value={title}
+                        onChange={handleTitleChange}
+                        placeholder="Untitled"
+                        className="cursor-text bg-transparent text-xl sm:text-2xl font-bold text-zinc-100 outline-none placeholder-zinc-700 tracking-tight w-full pb-6 sm:pb-7"
+                    />
+
+                    {/* Separator */}
+                    <div className="border-t border-zinc-800/80 mb-6 sm:mb-7" />
+
+                    {/* Content */}
+                    <textarea
+                        value={content}
+                        onChange={handleContentChange}
+                        placeholder="Start writing…"
+                        className="cursor-text flex-1 bg-transparent text-zinc-300 text-sm leading-7 outline-none resize-none placeholder-zinc-600 w-full min-h-[60vh]"
+                    />
+                </div>
             </main>
         </div>
     )

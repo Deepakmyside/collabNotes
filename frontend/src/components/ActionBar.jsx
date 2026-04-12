@@ -33,10 +33,10 @@ function ActionBar({ onCreate, onJoin, onAuthRequired }) {
   return (
     <>
       <div className="mb-10 flex items-center gap-3">
-        {/* New Note – primary white */}
+        {/* New Note – primary */}
         <button
           onClick={handleNewNote}
-          className="group inline-flex items-center gap-1.5 h-9 px-5 rounded-xl text-xs font-semibold bg-white text-black hover:bg-zinc-100 active:scale-[0.96] transition-all duration-200"
+          className="group inline-flex items-center gap-1.5 h-9 px-5 rounded-xl text-xs font-semibold bg-zinc-200 text-zinc-900 hover:bg-zinc-300 active:scale-[0.96] transition-all duration-200"
         >
           <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
