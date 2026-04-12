@@ -17,8 +17,8 @@ const createNote = async (req, res) => {
          res.status(201).json({note})
 
     } catch (error) {
-         console.log(error)
-         res.status(500).json({ message: 'Server error', error})
+         console.error("Create Note Error", error)
+         res.status(500).json({ message: 'Unable to create note'})
         }
 }
 
@@ -36,8 +36,8 @@ const getAllNotes = async (req, res) => {
         res.status(200).json(note)
     
     }catch (error) {
-        console.log(error)
-        res.status(500).json({message:"Server error", error})
+        console.errror("Get Notes Error",error)
+        res.status(500).json({message:"Unable to fetch notes"})
     }
 }
 
@@ -51,8 +51,8 @@ const getNoteById = async (req, res) => {
 
         res.status(200).json(note)
     } catch (error) {
-        console.log(error)
-        res.status(500).json({message: 'Server error', error})
+        console.error("Get NoteById error",error)
+        res.status(500).json({message:"Unable to fetch note"})
     }
 }
 
@@ -78,8 +78,8 @@ const updateNote = async (req, res) => {
         res.status(200).json(note)
 
     } catch (error) {
-        console.log(error)
-        res.status(500).json({message: "Server error", error})
+        console.error("Update Note Error",error)
+        res.status(500).json({message:"Unable to update note"})
     }
 }
 
@@ -99,9 +99,40 @@ const deleteNote = async (req, res) => {
          res.status(200).json({ message: "Note deleted succesfully"})
 
     } catch (error) {
-        console.log(error)
-        res.status(500).json({ message: 'Server error', error})
+        console.error("Delete Note Error",error)
+        res.status(500).json({ message: "Unable to delete note"})
     }
+}
+
+const joinRoom = async (req, res)  => {
+    try {
+        const { roomId} = req.body
+        const note = await Note.findOne({ roomId})
+        if(!note) {
+            return res.status(404).json({
+                message: "Room not found- check your room ID" })
+        }
+            const isOwner = note.owner.toString() === req.user.id
+            const isCollaborator = (note.collaborators || []).map(id => id.toString()).includes(req.user.id)
+
+           if( isOwner || isCollaborator) {
+            return res.status(200).json({ message: "Already in room", roomId: note.roomId})
+           }
+
+           note.collaborators.push(req.user.id)
+           await note.save()
+
+           res.status(200).json({ message: "Joined successfully", roomId: note.roomId})
+    
+      }catch(error){
+        console.error("Join Room Error", error);
+
+        res.status(500).json({
+            message: "Unable to join room"
+        })
+
+      }
+      
 }
 
 module.exports = { createNote, updateNote, getAllNotes, getNoteById, deleteNote }
