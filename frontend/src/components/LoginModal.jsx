@@ -48,7 +48,7 @@ function LoginModal({ isOpen, onClose, onSuccess, pendingRoomId }) {
             if (pendingRoomId) {
                 try {
                     await API.post('/notes/join', { roomId: pendingRoomId })
-                } catch {}
+                } catch { }
                 onClose()
                 navigate(`/editor/${pendingRoomId}`)
             } else {
@@ -68,7 +68,7 @@ function LoginModal({ isOpen, onClose, onSuccess, pendingRoomId }) {
         if (pendingRoomId) {
             localStorage.setItem('pendingRoomId', pendingRoomId)
         }
-        window.location.href = "http://localhost:3000/api/auth/google"
+        window.location.href = `${import.meta.env.VITE_API_URL}/auth/google`
     }
 
     return (
@@ -100,21 +100,19 @@ function LoginModal({ isOpen, onClose, onSuccess, pendingRoomId }) {
                 <div className="flex p-0.5 bg-black border border-zinc-800 rounded-xl mb-5">
                     <button
                         onClick={() => { setIsLogin(true); setError('') }}
-                        className={`flex-1 py-2 rounded-[10px] text-xs font-medium transition-all duration-200 ${
-                            isLogin
-                                ? 'bg-zinc-800 text-zinc-100 shadow-sm'
-                                : 'text-zinc-500 hover:text-zinc-300'
-                        }`}
+                        className={`flex-1 py-2 rounded-[10px] text-xs font-medium transition-all duration-200 ${isLogin
+                            ? 'bg-zinc-800 text-zinc-100 shadow-sm'
+                            : 'text-zinc-500 hover:text-zinc-300'
+                            }`}
                     >
                         Sign In
                     </button>
                     <button
                         onClick={() => { setIsLogin(false); setError('') }}
-                        className={`flex-1 py-2 rounded-[10px] text-xs font-medium transition-all duration-200 ${
-                            !isLogin
-                                ? 'bg-zinc-800 text-zinc-100 shadow-sm'
-                                : 'text-zinc-500 hover:text-zinc-300'
-                        }`}
+                        className={`flex-1 py-2 rounded-[10px] text-xs font-medium transition-all duration-200 ${!isLogin
+                            ? 'bg-zinc-800 text-zinc-100 shadow-sm'
+                            : 'text-zinc-500 hover:text-zinc-300'
+                            }`}
                     >
                         Sign Up
                     </button>
@@ -161,9 +159,9 @@ function LoginModal({ isOpen, onClose, onSuccess, pendingRoomId }) {
                     onClick={handleGoogleLogin}
                     className="w-full flex items-center justify-center gap-2 bg-black border border-zinc-700 text-zinc-200 rounded-full h-9 text-xs font-medium hover:border-zinc-500 transition-all duration-150 mb-3"
                 >
-                    <img 
-                        src="https://www.svgrepo.com/show/475656/google-color.svg" 
-                        alt="google" 
+                    <img
+                        src="https://www.svgrepo.com/show/475656/google-color.svg"
+                        alt="google"
                         className="w-4 h-4"
                     />
                     Continue with Google

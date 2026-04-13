@@ -22,7 +22,7 @@ const googleCallback = [
         { expiresIn: '7d' }
       )
 
-      res.redirect(`${CLIENT_URL}/oauth-success?token=${token}`)
+      res.redirect(`${CLIENT_URL}oauth-success?token=${token}`)
     } catch (err) {
       console.log("OAuth Error:", err)
       res.redirect(`${CLIENT_URL}/?error=server_error`)
