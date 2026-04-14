@@ -111,7 +111,7 @@ function Dashboard() {
                     {/* ── Hero ── */}
                     <div className="mb-10 relative">
                         {isLoggedIn ? (
-                            <>
+                            <>ZVC2AQ
                                 {/* Penbook decor – workspace */}
                                 <div className="hidden sm:block absolute -top-2 right-0 w-20 opacity-[0.65] pointer-events-none select-none"
                                     style={{ filter: '   brightness(1.9) drop-shadow(0 4px 12px rgba(160,70,10,0.7))' }}>
@@ -184,7 +184,7 @@ function Dashboard() {
                         </div>
                     ) : notes.length === 0 ? (
                         <div className="py-16 text-center">
-                            <p className="text-ink-3 text-sm">No notes yet — hit <span className="text-ink-2">+ New Note</span> to create one</p>
+                            <p className="text-ink-3 text-md">Starting creating notes...!</p>
                         </div>
                     ) : (
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">

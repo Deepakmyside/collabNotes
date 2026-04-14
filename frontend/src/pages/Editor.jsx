@@ -174,7 +174,7 @@ function Editor() {
                         value={content}
                         onChange={handleContentChange}
                         placeholder="Start writing…"
-                        className="cursor-text flex-1 bg-transparent text-ink-2 text-sm leading-7 outline-none resize-none placeholder-ink-3 w-full min-h-[60vh]"
+                        className="cursor-text flex-1 bg-transparent text-ink-1 text-md leading-7 outline-none resize-none placeholder-ink-3 w-full min-h-[60vh]"
                     />
                 </div>
             </main>
