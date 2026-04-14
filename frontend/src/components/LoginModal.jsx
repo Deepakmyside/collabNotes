@@ -73,36 +73,36 @@ function LoginModal({ isOpen, onClose, onSuccess, pendingRoomId }) {
 
     return (
         <div
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm"
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-ink/[0.35] backdrop-blur-sm"
             onClick={(e) => { if (e.target === e.currentTarget) onClose() }}
         >
-            <div className="w-full max-w-sm bg-zinc-900 border border-zinc-700/60 rounded-2xl p-6 shadow-2xl animate-in fade-in zoom-in-95 duration-200">
+            <div className="w-full max-w-sm bg-surface border border-edge rounded-2xl p-6 shadow-2xl animate-in fade-in zoom-in-95 duration-200">
 
                 {/* Header */}
                 <div className="flex items-start justify-between mb-6">
                     <div>
-                        <h2 className="text-zinc-100 text-base font-semibold mb-0.5">
+                        <h2 className="text-ink text-base font-semibold mb-0.5">
                             {isLogin ? 'Sign in' : 'Create account'}
                         </h2>
-                        <p className="text-zinc-500 text-xs">
+                        <p className="text-ink-2 text-xs">
                             {isLogin ? 'Welcome back to collabNotes' : 'Start collaborating for free'}
                         </p>
                     </div>
                     <button
                         onClick={onClose}
-                        className="text-zinc-600 hover:text-zinc-300 transition-colors text-lg leading-none mt-0.5"
+                        className="text-ink-2 hover:text-ink transition-colors text-lg leading-none mt-0.5"
                     >
                         ✕
                     </button>
                 </div>
 
                 {/* Tab toggle */}
-                <div className="flex p-0.5 bg-black border border-zinc-800 rounded-xl mb-5">
+                <div className="flex p-0.5 bg-surface-3 border border-edge rounded-xl mb-5">
                     <button
                         onClick={() => { setIsLogin(true); setError('') }}
                         className={`flex-1 py-2 rounded-[10px] text-xs font-medium transition-all duration-200 ${isLogin
-                            ? 'bg-zinc-800 text-zinc-100 shadow-sm'
-                            : 'text-zinc-500 hover:text-zinc-300'
+                            ? 'bg-surface text-ink shadow-sm'
+                            : 'text-ink-2 hover:text-ink'
                             }`}
                     >
                         Sign In
@@ -110,8 +110,8 @@ function LoginModal({ isOpen, onClose, onSuccess, pendingRoomId }) {
                     <button
                         onClick={() => { setIsLogin(false); setError('') }}
                         className={`flex-1 py-2 rounded-[10px] text-xs font-medium transition-all duration-200 ${!isLogin
-                            ? 'bg-zinc-800 text-zinc-100 shadow-sm'
-                            : 'text-zinc-500 hover:text-zinc-300'
+                            ? 'bg-surface text-ink shadow-sm'
+                            : 'text-ink-2 hover:text-ink'
                             }`}
                     >
                         Sign Up
@@ -127,7 +127,7 @@ function LoginModal({ isOpen, onClose, onSuccess, pendingRoomId }) {
                             value={name}
                             onChange={(e) => setName(e.target.value)}
                             onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}
-                            className="w-full bg-black border border-zinc-700 text-zinc-100 placeholder-zinc-600 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-zinc-500 transition-colors"
+                            className="w-full bg-surface-2 border border-edge text-ink placeholder-ink-3 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-accent transition-colors"
                         />
                     )}
                     <input
@@ -136,7 +136,7 @@ function LoginModal({ isOpen, onClose, onSuccess, pendingRoomId }) {
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}
-                        className="w-full bg-black border border-zinc-700 text-zinc-100 placeholder-zinc-600 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-zinc-500 transition-colors"
+                        className="w-full bg-surface-2 border border-edge text-ink placeholder-ink-3 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-accent transition-colors"
                     />
                     <input
                         type="password"
@@ -144,7 +144,7 @@ function LoginModal({ isOpen, onClose, onSuccess, pendingRoomId }) {
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}
-                        className="w-full bg-black border border-zinc-700 text-zinc-100 placeholder-zinc-600 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-zinc-500 transition-colors"
+                        className="w-full bg-surface-2 border border-edge text-ink placeholder-ink-3 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-accent transition-colors"
                     />
                 </div>
 
@@ -157,7 +157,7 @@ function LoginModal({ isOpen, onClose, onSuccess, pendingRoomId }) {
                 {/* 🔥 GOOGLE LOGIN BUTTON */}
                 <button
                     onClick={handleGoogleLogin}
-                    className="w-full flex items-center justify-center gap-2 bg-black border border-zinc-700 text-zinc-200 rounded-full h-9 text-xs font-medium hover:border-zinc-500 transition-all duration-150 mb-3"
+                    className="w-full flex items-center justify-center gap-2 bg-surface-2 border border-edge text-ink rounded-full h-9 text-xs font-medium hover:border-ink-3 transition-all duration-150 mb-3"
                 >
                     <img
                         src="https://www.svgrepo.com/show/475656/google-color.svg"
@@ -169,16 +169,16 @@ function LoginModal({ isOpen, onClose, onSuccess, pendingRoomId }) {
 
                 {/* Divider */}
                 <div className="flex items-center gap-2 mb-3">
-                    <div className="flex-1 h-px bg-zinc-700" />
-                    <span className="text-zinc-500 text-[10px]">OR</span>
-                    <div className="flex-1 h-px bg-zinc-700" />
+                    <div className="flex-1 h-px bg-edge" />
+                    <span className="text-ink-3 text-[10px]">OR</span>
+                    <div className="flex-1 h-px bg-edge" />
                 </div>
 
                 {/* Email Auth */}
                 <button
                     onClick={handleSubmit}
                     disabled={loading}
-                    className="w-full h-9 rounded-full text-xs font-semibold bg-white text-black hover:bg-zinc-100 active:scale-[0.98] transition-all duration-150 disabled:opacity-40 disabled:cursor-not-allowed"
+                    className="w-full h-9 rounded-full text-xs font-semibold bg-accent text-accent-fg hover:bg-accent-hover active:scale-[0.98] transition-all duration-150 disabled:opacity-40 disabled:cursor-not-allowed"
                 >
                     {loading ? 'Please wait…' : isLogin ? 'Sign In' : 'Create Account'}
                 </button>

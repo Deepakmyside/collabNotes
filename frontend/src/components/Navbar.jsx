@@ -11,7 +11,7 @@ function Navbar({ onLoginClick }) {
     }
 
     return (
-                    <header className="sticky top-0 z-40 border-b border-zinc-800/60 backdrop-blur-xl" style={{ background: 'rgba(17,17,19,0.8)' }}>
+        <header className="sticky top-0 z-40 border-b border-edge backdrop-blur-xl" style={{ background: 'var(--color-panel)' }}>
             <div className="max-w-5xl mx-auto px-6 h-14 flex items-center justify-between">
 
                 {/* Logo */}
@@ -19,8 +19,8 @@ function Navbar({ onLoginClick }) {
                     onClick={() => navigate('/')}
                     className="flex items-center gap-2 select-none group"
                 >
-                    <img src="./favicon.svg" alt="logo" className="w-5 h-5 opacity-90" />
-                    <span className="text-sm font-semibold text-zinc-100 tracking-tight group-hover:text-white transition-colors">
+                    <img src="./favicon.svg" alt="logo" className="w-7 h-7 opacity-90" />
+                    <span className="text-sm font-semibold text-ink tracking-tight group-hover:text-ink transition-colors">
                         collabNotes
                     </span>
                 </button>
@@ -30,14 +30,14 @@ function Navbar({ onLoginClick }) {
                     {token ? (
                         <button
                             onClick={logout}
-                            className="h-8 px-4 rounded-full text-xs font-medium text-zinc-400 border border-zinc-700 hover:border-zinc-500 hover:text-zinc-200 transition-all duration-200"
+                            className="h-8 px-4 rounded-full text-xs font-medium text-ink-2 border border-edge hover:border-ink-3 hover:text-ink transition-all duration-200"
                         >
                             Log out
                         </button>
                     ) : (
                         <button
                             onClick={onLoginClick}
-                            className="h-8 px-4 rounded-full text-xs font-semibold bg-zinc-200 text-zinc-900 hover:bg-zinc-300 transition-all duration-200"
+                            className="h-8 px-4 rounded-full text-xs font-semibold bg-accent text-accent-fg hover:bg-accent-hover transition-all duration-200"
                         >
                             Sign in
                         </button>

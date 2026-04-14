@@ -14,10 +14,13 @@ function Editor() {
     const [copied, setCopied] = useState(false)
     const [savedFlash, setSavedFlash] = useState(false)
     const [loading, setLoading]= useState(true)
+
     useEffect(() => {
         fetchNote()
         socket.connect()
+        console.log('Socket connected:', socket.id)
         socket.emit('join-room', roomId)
+        console.log('joining room:', roomId)
 
         socket.on('note-change', ({ content, title }) => {
             if (content !== undefined) setContent(content)
@@ -25,6 +28,7 @@ function Editor() {
         })
 
         socket.on('room-users', (count) => setOnlineUsers(count))
+        
 
         return () => {
             socket.off('note-change')
@@ -78,21 +82,21 @@ function Editor() {
         setTimeout(() => setCopied(false), 2000)
     }
      if (loading) return (
-    <div className="min-h-screen flex items-center justify-center" style={{ background: '#111113' }}>
-        <div className="text-zinc-600 text-sm">Loading note...</div>
+    <div className="min-h-screen flex items-center justify-center bg-surface">
+        <div className="text-ink-2 text-sm">Loading note...</div>
     </div>
 )
     return (
-        <div className="min-h-screen text-white flex flex-col" style={{ background: '#111113' }}>
+        <div className="min-h-screen text-ink flex flex-col bg-surface">
 
             {/* ── Top bar ── */}
-            <header className="sticky top-0 z-40 border-b border-zinc-800/60 bg-black/80 backdrop-blur-xl">
+            <header className="sticky top-0 z-40 border-b border-edge backdrop-blur-xl" style={{ background: 'var(--color-panel)' }}>
                 <div className="px-4 sm:px-6 h-14 flex items-center justify-between gap-2 sm:gap-4">
 
                     {/* Left: back */}
                     <button
                         onClick={() => navigate('/')}
-                        className="cursor-pointer flex items-center gap-1.5 text-zinc-500 hover:text-zinc-200 text-xs transition-colors duration-150 shrink-0"
+                        className="cursor-pointer flex items-center gap-1.5 text-ink-2 hover:text-ink text-xs transition-colors duration-150 shrink-0"
                     >
                         <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                             <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
@@ -103,15 +107,15 @@ function Editor() {
                     {/* Center: room pill — full on sm+, icon-only on mobile */}
                     <button
                         onClick={copyRoomId}
-                        className="cursor-pointer flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1.5 rounded-full border border-zinc-800 hover:border-zinc-600 bg-zinc-900/60 hover:bg-zinc-800/60 transition-all duration-150 group min-w-0"
+                        className="cursor-pointer flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1.5 rounded-full border border-edge hover:border-ink-3 bg-surface-2 hover:bg-surface-3 transition-all duration-150 group min-w-0"
                         title={copied ? 'Copied!' : 'Copy room code'}
                     >
                         {/* Label + code: visible sm+ only */}
-                        <span className="hidden sm:inline text-zinc-500 text-xs shrink-0">Room</span>
-                        <span className="hidden sm:inline text-zinc-300 text-xs font-mono truncate max-w-[120px]">{roomId?.slice(0, 10)}…</span>
+                        <span className="hidden sm:inline text-ink-2 text-xs shrink-0">Room</span>
+                        <span className="hidden sm:inline text-ink text-xs font-mono truncate max-w-[120px]">{roomId?.slice(0, 10)}…</span>
 
                         {/* Copy icon — always visible */}
-                        <span className={`text-xs transition-colors duration-150 ${copied ? 'text-green-400' : 'text-zinc-500 group-hover:text-zinc-300'}`}>
+                        <span className={`text-xs transition-colors duration-150 ${copied ? 'text-amber-500' : 'text-ink-2 group-hover:text-ink'}`}>
                             {copied ? (
                                 <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
@@ -124,7 +128,7 @@ function Editor() {
                         </span>
 
                         {/* Mobile: show short code next to icon */}
-                        <span className="sm:hidden text-zinc-500 text-[10px] font-mono">{roomId?.slice(0, 6)}</span>
+                        <span className="sm:hidden text-ink-2 text-[10px] font-mono">{roomId?.slice(0, 6)}</span>
                     </button>
 
                     {/* Right */}
@@ -140,7 +144,7 @@ function Editor() {
                             className={`cursor-pointer h-8 px-3 sm:px-4 rounded-full text-xs font-semibold transition-all duration-150 disabled:opacity-40 disabled:cursor-not-allowed ${
                                 savedFlash
                                     ? 'bg-green-500 text-white'
-                                    : 'bg-zinc-200 text-zinc-900 hover:bg-zinc-300 active:scale-[0.97]'
+                                    : 'bg-accent text-accent-fg hover:bg-accent-hover active:scale-[0.97]'
                             }`}
                         >
                             {savedFlash ? '✓ Saved' : saving ? 'Saving…' : 'Save'}
@@ -150,7 +154,7 @@ function Editor() {
             </header>
 
             {/* ── Editor body — full-bleed writing surface ── */}
-            <main className="flex-1 flex flex-col" style={{ background: '#141416' }}>
+            <main className="flex-1 flex flex-col bg-surface-2">
                 <div className="max-w-3xl mx-auto w-full px-5 sm:px-8 flex-1 flex flex-col py-8 sm:py-10">
 
                     {/* Title */}
@@ -159,18 +163,18 @@ function Editor() {
                         value={title}
                         onChange={handleTitleChange}
                         placeholder="Untitled"
-                        className="cursor-text bg-transparent text-xl sm:text-2xl font-bold text-zinc-100 outline-none placeholder-zinc-700 tracking-tight w-full pb-6 sm:pb-7"
+                        className="cursor-text bg-transparent text-xl sm:text-2xl font-bold text-ink outline-none placeholder-ink-3 tracking-tight w-full pb-6 sm:pb-7"
                     />
 
                     {/* Separator */}
-                    <div className="border-t border-zinc-800/80 mb-6 sm:mb-7" />
+                    <div className="border-t border-edge mb-6 sm:mb-7" />
 
                     {/* Content */}
                     <textarea
                         value={content}
                         onChange={handleContentChange}
                         placeholder="Start writing…"
-                        className="cursor-text flex-1 bg-transparent text-zinc-300 text-sm leading-7 outline-none resize-none placeholder-zinc-600 w-full min-h-[60vh]"
+                        className="cursor-text flex-1 bg-transparent text-ink-2 text-sm leading-7 outline-none resize-none placeholder-ink-3 w-full min-h-[60vh]"
                     />
                 </div>
             </main>

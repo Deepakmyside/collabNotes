@@ -36,7 +36,7 @@ function ActionBar({ onCreate, onJoin, onAuthRequired }) {
         {/* New Note – primary */}
         <button
           onClick={handleNewNote}
-          className="group inline-flex items-center gap-1.5 h-9 px-5 rounded-xl text-xs font-semibold bg-zinc-200 text-zinc-900 hover:bg-zinc-300 active:scale-[0.96] transition-all duration-200"
+          className="group inline-flex items-center gap-1.5 h-9 px-5 rounded-xl text-xs font-semibold bg-accent text-accent-fg hover:bg-accent-hover active:scale-[0.96] transition-all duration-200"
         >
           <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
@@ -47,7 +47,7 @@ function ActionBar({ onCreate, onJoin, onAuthRequired }) {
         {/* Join Session – zinc border */}
         <button
           onClick={handleJoinClick}
-          className="group inline-flex items-center gap-1.5 h-9 px-5 rounded-xl text-xs font-medium text-zinc-400 border border-zinc-700 hover:border-zinc-500 hover:text-zinc-100 active:scale-[0.96] transition-all duration-200"
+          className="group inline-flex items-center gap-1.5 h-9 px-5 rounded-xl text-xs font-medium text-ink-2 border border-edge hover:border-ink-3 hover:text-ink active:scale-[0.96] transition-all duration-200"
         >
           <svg className="w-3.5 h-3.5 opacity-60 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
@@ -58,9 +58,9 @@ function ActionBar({ onCreate, onJoin, onAuthRequired }) {
 
       {/* ── Create Modal ── */}
       <Modal show={showCreate} onClose={() => { setShowCreate(false); setTitle("") }}>
-        <div className="w-full max-w-sm bg-zinc-900 border border-zinc-700/60 rounded-2xl p-6 shadow-2xl">
-          <h3 className="text-zinc-100 text-base font-semibold mb-1">New Note</h3>
-          <p className="text-zinc-500 text-xs mb-5">Give your note a title to get started</p>
+        <div className="w-full max-w-sm bg-surface border border-edge rounded-2xl p-6 shadow-2xl">
+          <h3 className="text-ink text-base font-semibold mb-1">New Note</h3>
+          <p className="text-ink-2 text-xs mb-5">Give your note a title to get started</p>
 
           <input
             type="text"
@@ -74,13 +74,13 @@ function ActionBar({ onCreate, onJoin, onAuthRequired }) {
                 onCreate(title); setTitle(""); setShowCreate(false)
               }
             }}
-            className="w-full bg-black border border-zinc-700 text-zinc-100 placeholder-zinc-600 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-zinc-500 transition-colors mb-4"
+            className="w-full bg-surface-2 border border-edge text-ink placeholder-ink-3 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-ink-3 transition-colors mb-4"
           />
 
           <div className="flex justify-end gap-2">
             <button
               onClick={() => { setShowCreate(false); setTitle("") }}
-              className="h-8 px-4 rounded-full text-xs text-zinc-500 hover:text-zinc-300 transition-colors"
+              className="h-8 px-4 rounded-full text-xs text-ink-2 hover:text-ink transition-colors"
             >
               Cancel
             </button>
@@ -89,7 +89,7 @@ function ActionBar({ onCreate, onJoin, onAuthRequired }) {
                 if (!title.trim()) return
                 onCreate(title); setTitle(""); setShowCreate(false)
               }}
-              className="h-8 px-4 rounded-full text-xs font-semibold bg-white text-black hover:bg-zinc-100 transition-colors"
+              className="h-8 px-4 rounded-full text-xs font-semibold bg-accent text-accent-fg hover:bg-accent-hover transition-colors"
             >
               Create
             </button>
@@ -99,9 +99,9 @@ function ActionBar({ onCreate, onJoin, onAuthRequired }) {
 
       {/* ── Join Modal ── */}
       <Modal show={showJoin} onClose={() => { setShowJoin(false); setRoomId("") }}>
-        <div className="w-full max-w-sm bg-zinc-900 border border-zinc-700/60 rounded-2xl p-6 shadow-2xl">
-          <h3 className="text-zinc-100 text-base font-semibold mb-1">Join a Session</h3>
-          <p className="text-zinc-500 text-xs mb-5">Paste the room code shared with you</p>
+        <div className="w-full max-w-sm bg-surface border border-edge rounded-2xl p-6 shadow-2xl">
+          <h3 className="text-ink text-base font-semibold mb-1">Join a Session</h3>
+          <p className="text-ink-2 text-xs mb-5">Paste the room code shared with you</p>
 
           <input
             type="text"
@@ -115,13 +115,13 @@ function ActionBar({ onCreate, onJoin, onAuthRequired }) {
                 onJoin(roomId); setRoomId(""); setShowJoin(false)
               }
             }}
-            className="w-full bg-black border border-zinc-700 text-zinc-100 placeholder-zinc-600 rounded-xl px-4 py-2.5 text-sm font-mono outline-none focus:border-zinc-500 transition-colors mb-4"
+            className="w-full bg-surface-2 border border-edge text-ink placeholder-ink-3 rounded-xl px-4 py-2.5 text-sm font-mono outline-none focus:border-ink-3 transition-colors mb-4"
           />
 
           <div className="flex justify-end gap-2">
             <button
               onClick={() => { setShowJoin(false); setRoomId("") }}
-              className="h-8 px-4 rounded-full text-xs text-zinc-500 hover:text-zinc-300 transition-colors"
+              className="h-8 px-4 rounded-full text-xs text-ink-2 hover:text-ink transition-colors"
             >
               Cancel
             </button>
@@ -130,7 +130,7 @@ function ActionBar({ onCreate, onJoin, onAuthRequired }) {
                 if (!roomId.trim()) return
                 onJoin(roomId); setRoomId(""); setShowJoin(false)
               }}
-              className="h-8 px-4 rounded-full text-xs font-semibold bg-white text-black hover:bg-zinc-100 transition-colors"
+              className="h-8 px-4 rounded-full text-xs font-semibold bg-accent text-accent-fg hover:bg-accent-hover transition-colors"
             >
               Join
             </button>
