@@ -1,5 +1,41 @@
 @import "tailwindcss";
+
+@theme {
+  /* ── Surfaces ── */
+  --color-surface:   #f5f0e8;   /* warm cream – easier on eyes    */
+  --color-surface-2: #ede6d8;   /* deeper warm cream              */
+  --color-surface-3: #e4dbc9;   /* warm tan – hover fills         */
+
+  /* ── Text ── */
+  --color-ink:   #1c1917;   /* headings / strong text   */
+  --color-ink-2: #78716c;   /* body / subtext           */
+  --color-ink-3: #a8a29e;   /* placeholders / metadata  */
+
+  /* ── Borders ── */
+  --color-edge:        #d9cfc0;   /* warm standard border   */
+  --color-edge-subtle: #e4dace;   /* soft inner border      */
+
+  /* ── Accent – burnt orange ── */
+  --color-accent:       #c2570d;   /* primary button bg    */
+  --color-accent-fg:    #fefce8;   /* text on accent       */
+  --color-accent-hover: #a34609;   /* hover state          */
+
+  /* ── Panel (navbar glass) ── */
+  --color-panel: rgba(245, 240, 232, 0.88);
+}
+
 body {
-    background-color: #0a0a0a;
+    background-color: var(--color-surface);
     margin: 0;
+}
+
+/* Typewriter reveal — used on hero 'together.' */
+@keyframes typewriter {
+  from { clip-path: inset(0 100% 0 0); }
+  to   { clip-path: inset(0 0%   0 0); }
+}
+
+@keyframes blink-cursor {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
 }
