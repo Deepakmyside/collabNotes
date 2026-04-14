@@ -111,7 +111,7 @@ function Dashboard() {
                     {/* ── Hero ── */}
                     <div className="mb-10 relative">
                         {isLoggedIn ? (
-                            <>ZVC2AQ
+                            <>
                                 {/* Penbook decor – workspace */}
                                 <div className="hidden sm:block absolute -top-2 right-0 w-20 opacity-[0.65] pointer-events-none select-none"
                                     style={{ filter: '   brightness(1.9) drop-shadow(0 4px 12px rgba(160,70,10,0.7))' }}>
