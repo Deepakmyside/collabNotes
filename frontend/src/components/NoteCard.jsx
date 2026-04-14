@@ -16,20 +16,15 @@ function NoteCard({ note, onDelete }) {
 
     return (
         <div
-            className="group relative flex flex-col bg-surface-2 border border-edge rounded-2xl overflow-hidden hover:border-ink-2 hover:bg-surface-3 transition-all duration-200 cursor-pointer"
+            className="group relative flex flex-col bg-surface-2 border border-edge rounded-2xl overflow-hidden hover:border-ink-2  transition-all duration-200 cursor-pointer"
             style={{ boxShadow: '0 1px 0 0 rgba(28,25,23,0.04) inset' }}
         >
             {/* Top strip */}
             <div className="flex items-center justify-between px-4 pt-4 pb-3">
                 {/* File icon */}
-                <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-surface-3 border border-edge flex-shrink-0">
-                    <svg className="w-4 h-4 text-ink-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
-                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                    </svg>
-                </div>
+              
                 {/* Room code badge */}
-                <span className="text-ink-3 text-[10px] font-mono bg-surface-3 px-2 py-0.5 rounded-md border border-edge">
+                <span className="text-ink-3 text-[10px] font-mono bg-surface px-2 py-0.5 rounded-md border border-edge">
                     #{note.roomId?.slice(0, 6)}
                 </span>
             </div>
@@ -42,7 +37,7 @@ function NoteCard({ note, onDelete }) {
                 <h3 className="text-ink font-semibold text-sm mb-1.5 leading-snug line-clamp-1">
                     {note.title || 'Untitled'}
                 </h3>
-                <p className="text-ink-2 text-xs leading-relaxed line-clamp-3 min-h-[3rem]">
+                <p className="text-ink text-xs leading-relaxed line-clamp-3 min-h-[3rem]">
                     {note.content || 'No content yet — click to start writing.'}
                 </p>
             </div>

@@ -3,8 +3,8 @@
 @theme {
   /* ── Surfaces ── */
   --color-surface:   #f5f0e8;   /* warm cream – easier on eyes    */
-  --color-surface-2: #ede6d8;   /* deeper warm cream              */
-  --color-surface-3: #e4dbc9;   /* warm tan – hover fills         */
+  --color-surface-2: #f8ede3;  /* deeper warm cream              */
+  --color-surface-3: #e6d5c3;   /* warm tan – hover fills         */
 
   /* ── Text ── */
   --color-ink:   #1c1917;   /* headings / strong text   */
