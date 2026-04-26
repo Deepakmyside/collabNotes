@@ -10,7 +10,7 @@ function Footer() {
         </p>
          <div className="flex gap-3">
                   <a
-            href="https://github.com/deepakmyside/collabNotes"
+            href="https://github.com/thislinkdoesnotexist999"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-2 text-ink-2 text-xs hover:text-ink transition"
